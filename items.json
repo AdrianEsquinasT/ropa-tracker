@@ -1,7 +1,203 @@
 [
-  {"art": "5052/543/406", "type": "top",    "label_price": 17.99, "label_size": "S",  "url": "", "name": "", "photo": ""},
-  {"art": "1048/502/800", "type": "top",    "label_price": 17.99, "label_size": "S",  "url": "", "name": "", "photo": ""},
-  {"art": "5922/555/800", "type": "bottom", "label_price": 22.99, "label_size": "40", "url": "", "name": "Pantalón negro (5922/555)", "photo": ""},
-  {"art": "1028/507/716", "type": "top",    "label_price": 15.99, "label_size": "L",  "url": "", "name": "", "photo": ""},
-  {"art": "5922/555/700", "type": "bottom", "label_price": 22.99, "label_size": "38", "url": "", "name": "Pantalón granate/marrón (5922/555)", "photo": ""}
+ {
+  "art": "5052/543/406",
+  "type": "top",
+  "label_price": 17.99,
+  "label_size": "S",
+  "url": "",
+  "name": "",
+  "photo": "",
+  "store": "Lefties"
+ },
+ {
+  "art": "1048/502/800",
+  "type": "top",
+  "label_price": 17.99,
+  "label_size": "S",
+  "url": "",
+  "name": "",
+  "photo": "",
+  "store": "Lefties"
+ },
+ {
+  "art": "5922/555/800",
+  "type": "bottom",
+  "label_price": 22.99,
+  "label_size": "40",
+  "url": "",
+  "name": "Pantalón negro (5922/555)",
+  "photo": "",
+  "store": "Lefties"
+ },
+ {
+  "art": "1028/507/716",
+  "type": "top",
+  "label_price": 15.99,
+  "label_size": "L",
+  "url": "",
+  "name": "",
+  "photo": "",
+  "store": "Lefties"
+ },
+ {
+  "art": "5922/555/700",
+  "type": "bottom",
+  "label_price": 22.99,
+  "label_size": "38",
+  "url": "",
+  "name": "Pantalón granate/marrón (5922/555)",
+  "photo": "",
+  "store": "Lefties"
+ },
+ {
+  "art": "1004226122",
+  "store": "Desconocida",
+  "type": "top",
+  "label_price": 22.95,
+  "label_size": "S",
+  "url": "",
+  "name": "Sudadera Fusion I26 granate",
+  "photo": ""
+ },
+ {
+  "art": "5536/340/251",
+  "store": "Zara",
+  "type": "top",
+  "label_price": 29.95,
+  "label_size": "S",
+  "url": "",
+  "name": "Polo punto crudo",
+  "photo": ""
+ },
+ {
+  "art": "6318/327/807",
+  "store": "Zara",
+  "type": "top",
+  "label_price": 39.95,
+  "label_size": "S",
+  "url": "",
+  "name": "Jersey punto gris texturizado",
+  "photo": ""
+ },
+ {
+  "art": "2697/693/806",
+  "store": "Bershka",
+  "type": "top",
+  "label_price": 29.99,
+  "label_size": "S",
+  "url": "",
+  "name": "Jersey beige cuello alto",
+  "photo": ""
+ },
+ {
+  "art": "0761/360/251",
+  "store": "Zara",
+  "type": "top",
+  "label_price": 29.95,
+  "label_size": "M",
+  "url": "",
+  "name": "Sudadera blanca media cremallera",
+  "photo": ""
+ },
+ {
+  "art": "0526/325/700",
+  "store": "Zara",
+  "type": "top",
+  "label_price": 29.95,
+  "label_size": "M",
+  "url": "",
+  "name": "Polo marrón con cuello crudo",
+  "photo": ""
+ },
+ {
+  "art": "3211/500/251",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 29.99,
+  "label_size": "M",
+  "url": "",
+  "name": "Prenda waffle blanca/azul Rally Team",
+  "photo": ""
+ },
+ {
+  "art": "3235/501/403",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 19.99,
+  "label_size": "M",
+  "url": "",
+  "name": "Camiseta rayas marrón/azul",
+  "photo": ""
+ },
+ {
+  "art": "7210/538/104",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 27.99,
+  "label_size": "M",
+  "url": "",
+  "name": "Polo rugby blanco/marino",
+  "photo": ""
+ },
+ {
+  "art": "7721/517/800",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 25.99,
+  "label_size": "L",
+  "url": "",
+  "name": "Plumífero negro brillante",
+  "photo": "",
+  "label_original": 39.99
+ },
+ {
+  "art": "7231/560/250",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 19.99,
+  "label_size": "M",
+  "url": "",
+  "name": "Camiseta blanca Beat & ...",
+  "photo": ""
+ },
+ {
+  "art": "7558/508/800",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 22.99,
+  "label_size": "L",
+  "url": "",
+  "name": "Prenda negra 7558/508 (¿jogger o sudadera?)",
+  "photo": ""
+ },
+ {
+  "art": "7670/509/803",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 19.99,
+  "label_size": "XL",
+  "url": "",
+  "name": "Jogger gris",
+  "photo": ""
+ },
+ {
+  "art": "7558/508/700",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 22.99,
+  "label_size": "S",
+  "url": "",
+  "name": "Prenda marrón 7558/508 (¿jogger o sudadera?)",
+  "photo": ""
+ },
+ {
+  "art": "7210/521/752",
+  "store": "Pull&Bear",
+  "type": "top",
+  "label_price": 29.99,
+  "label_size": "XL",
+  "url": "",
+  "name": "Polo punto beige World Community",
+  "photo": ""
+ }
 ]

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T11:11+00:00",
+ "updated": "2026-11-20T21:31+00:00",
  "items": [
   {
    "art": "5052/543/406",
@@ -22,7 +22,8 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T11:11+00:00"
+   "last_checked": "2026-11-20T21:31+00:00",
+   "original_price": null
   },
   {
    "art": "1048/502/800",
@@ -45,7 +46,8 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T11:11+00:00"
+   "last_checked": "2026-11-20T21:31+00:00",
+   "original_price": null
   },
   {
    "art": "5922/555/800",
@@ -68,7 +70,8 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T11:11+00:00"
+   "last_checked": "2026-11-20T21:31+00:00",
+   "original_price": null
   },
   {
    "art": "1028/507/716",
@@ -91,7 +94,8 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 15.99,
-   "last_checked": "2026-11-20T11:11+00:00"
+   "last_checked": "2026-11-20T21:31+00:00",
+   "original_price": null
   },
   {
    "art": "5922/555/700",
@@ -114,7 +118,368 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T11:11+00:00"
+   "last_checked": "2026-11-20T21:31+00:00",
+   "original_price": null
+  },
+  {
+   "art": "1004226122",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 22.95,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Desconocida",
+   "original_price": null,
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Sudadera Fusion I26 granate",
+   "url": "",
+   "image": "",
+   "status": "error: sin URL: añádela en items.json",
+   "price": 22.95,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "5536/340/251",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.95,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Zara",
+   "original_price": null,
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Polo punto crudo",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.95,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "6318/327/807",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 39.95,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Zara",
+   "original_price": null,
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Jersey punto gris texturizado",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 39.95,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "2697/693/806",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Bershka",
+   "original_price": null,
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Jersey beige cuello alto",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "0761/360/251",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.95,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Zara",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Sudadera blanca media cremallera",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.95,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "0526/325/700",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.95,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Zara",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Polo marrón con cuello crudo",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.95,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "3211/500/251",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Prenda waffle blanca/azul Rally Team",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "3235/501/403",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 19.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Camiseta rayas marrón/azul",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 19.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7210/538/104",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 27.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Polo rugby blanco/marino",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 27.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7721/517/800",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 25.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": 39.99,
+   "label_size": "L",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Plumífero negro brillante",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 25.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7231/560/250",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 19.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "M",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Camiseta blanca Beat & ...",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 19.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7558/508/800",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 22.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "L",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Prenda negra 7558/508 (¿jogger o sudadera?)",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 22.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7670/509/803",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 19.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "XL",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Jogger gris",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 19.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7558/508/700",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 22.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Prenda marrón 7558/508 (¿jogger o sudadera?)",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 22.99,
+   "last_checked": "2026-11-20T21:31+00:00"
+  },
+  {
+   "art": "7210/521/752",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 29.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Pull&Bear",
+   "original_price": null,
+   "label_size": "XL",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Polo punto beige World Community",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 29.99,
+   "last_checked": "2026-11-20T21:31+00:00"
   }
  ]
 }

@@ -80,15 +80,20 @@ def parse_product(html):
     return out
 
 
-def find_url(art):
+DOMAINS = {"Lefties": "lefties.com", "Zara": "zara.com", "Bershka": "bershka.com", "Pull&Bear": "pullandbear.com"}
+
+
+def find_url(art, store="Lefties"):
     """EXPERIMENTAL: intenta localizar la URL buscando por referencia. Lo fiable es rellenar 'url'."""
-    ref = "".join(art.split("/")[:2])
-    html = fetch("https://www.lefties.com/es/search?term=" + urllib.parse.quote(ref))
-    m = re.search(r'href=["\'](https://www\.lefties\.com/[^"\']*%s[^"\']*)' % ref, html) or \
-        re.search(r'href=["\'](/es/[^"\']*%s[^"\']*)' % ref, html)
-    if not m:
+    dom = DOMAINS.get(store)
+    if not dom:
         return None
-    return urllib.parse.urljoin("https://www.lefties.com", m.group(1))
+    ref = "".join(art.split("/")[:2])
+    base = "https://www." + dom
+    html = fetch(base + "/es/search?term=" + urllib.parse.quote(ref))
+    m = re.search(r'href=["\'](https://www\.[^"\']*%s[^"\']*)' % ref, html) or \
+        re.search(r'href=["\'](/es/[^"\']*%s[^"\']*)' % ref, html)
+    return urllib.parse.urljoin(base, m.group(1)) if m else None
 
 
 def in_my_size(stock, wanted):
@@ -102,7 +107,8 @@ def build_record(item, prev, today):
         "art": item["art"], "history": [{"date": today.isoformat(), "price": item["label_price"], "source": "etiqueta"}],
     }
     rec.update({
-        "type": item["type"], "store": "Lefties", "label_size": item.get("label_size"),
+        "type": item["type"], "store": item.get("store", "Lefties"),
+        "original_price": item.get("label_original"), "label_size": item.get("label_size"),
         "wanted": WANTED[item["type"]],
         "name": item.get("name") or rec.get("name") or "Ref. " + item["art"],
         "url": item.get("url") or rec.get("url") or "",
@@ -115,7 +121,7 @@ def check_item(item, prev, today):
     rec = build_record(item, prev, today)
     alert = None
     try:
-        url = rec["url"] or find_url(item["art"])
+        url = rec["url"] or find_url(item["art"], item.get("store", "Lefties"))
         if not url:
             raise RuntimeError("sin URL: añádela en items.json")
         rec["url"] = url

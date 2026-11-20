@@ -35,7 +35,7 @@ function render(){
     const url=safeUrl(it.url);
     const c=document.createElement("div");c.className="card";
     c.innerHTML=`${img}<div class="b"><div class="name">${esc(it.name)}</div><div class="art">${esc(it.art)} · ${esc(it.store)}</div>
-    <div class="price">${fmt(it.price)} ${d<0?`<small class='ok'>${fmt(d)}</small>`:""}</div>
+    <div class="price">${it.original_price&&it.original_price>it.price?`<s class="art">${fmt(it.original_price)}</s> `:""}${fmt(it.price)} ${d<0?`<small class='ok'>${fmt(d)}</small>`:""}</div>
     ${size}<span class="tag">busco: ${esc(it.wanted.join("/"))}</span>
     <div class="art">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">Ver en Lefties</a>`:"sin URL"} · ${esc(it.status==="ok"?"ok":"⚠ "+it.status)}</div></div>
     <input class="chk" type="checkbox" ${cart.has(it.art)?"checked":""}>`;
