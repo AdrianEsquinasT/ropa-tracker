@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T21:36+00:00",
+ "updated": "2026-11-20T21:43+00:00",
  "items": [
   {
    "art": "5052/543/406",
@@ -22,7 +22,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T21:36+00:00",
+   "last_checked": "2026-11-20T21:43+00:00",
    "original_price": null
   },
   {
@@ -46,7 +46,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T21:36+00:00",
+   "last_checked": "2026-11-20T21:43+00:00",
    "original_price": null
   },
   {
@@ -70,7 +70,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:36+00:00",
+   "last_checked": "2026-11-20T21:43+00:00",
    "original_price": null
   },
   {
@@ -94,7 +94,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 15.99,
-   "last_checked": "2026-11-20T21:36+00:00",
+   "last_checked": "2026-11-20T21:43+00:00",
    "original_price": null
   },
   {
@@ -118,7 +118,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:36+00:00",
+   "last_checked": "2026-11-20T21:43+00:00",
    "original_price": null
   },
   {
@@ -143,7 +143,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.95,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "5536/340/251",
@@ -167,7 +167,7 @@
    "image": "",
    "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "6318/327/807",
@@ -191,7 +191,7 @@
    "image": "",
    "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 39.95,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "2697/693/806",
@@ -215,7 +215,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "0761/360/251",
@@ -239,7 +239,7 @@
    "image": "",
    "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "0526/325/700",
@@ -263,7 +263,7 @@
    "image": "",
    "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "3211/500/251",
@@ -287,7 +287,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "3235/501/403",
@@ -311,7 +311,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7210/538/104",
@@ -335,7 +335,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 27.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7721/517/800",
@@ -359,7 +359,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 25.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7231/560/250",
@@ -383,7 +383,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7558/508/800",
@@ -407,7 +407,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7670/509/803",
@@ -431,7 +431,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7558/508/700",
@@ -455,7 +455,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   },
   {
    "art": "7210/521/752",
@@ -479,7 +479,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:36+00:00"
+   "last_checked": "2026-11-20T21:43+00:00"
   }
  ]
 }

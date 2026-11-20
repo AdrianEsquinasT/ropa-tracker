@@ -13,10 +13,12 @@ BLACK_FRIDAY = (date(2026, 11, 20), date(2026, 12, 1))
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
 
-def fetch(url):
+def fetch(url, with_url=False):
+    """Descarga la página. with_url devuelve también la URL final tras los redirects."""
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "es-ES,es;q=0.9"})
     with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode("utf-8", "replace")
+        html = r.read().decode("utf-8", "replace")
+        return (html, r.geturl()) if with_url else html
 
 
 def download_image(url, art, referer):
@@ -145,14 +147,16 @@ def check_item(item, prev, today):
         if not url:
             raise RuntimeError("sin URL: añádela en items.json")
         rec["url"] = url
-        info = parse_product(fetch(url))
+        html, final = fetch(url, with_url=True)
+        rec["final_url"] = final
+        info = parse_product(html)
         if info["price"] is None:
             raise RuntimeError("no se encontró precio en la página")
         if info["name"] and not item.get("name"):
             rec["name"] = info["name"]
         if info["image"] and not item.get("photo"):
-            img = urllib.parse.urljoin(url, info["image"])
-            rec["image"] = download_image(img, item["art"], url) or img
+            img = urllib.parse.urljoin(final, info["image"])
+            rec["image"] = download_image(img, item["art"], final) or img
         rec["stock"] = info["stock"]
         rec["in_my_size"] = in_my_size(info["stock"], rec["wanted"])
         last = rec["history"][-1]["price"]
