@@ -1,52 +1,90 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lefties tracker</title>
+<title>Ropa tracker</title>
 <style>
 :root{--bg:#f6f6f4;--fg:#1c1c1c;--card:#fff;--mut:#6b6b6b;--ok:#1a7f37;--bad:#b42318;--acc:#111}
 @media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#eee;--card:#1e1e1e;--mut:#9a9a9a;--ok:#4ade80;--bad:#f87171;--acc:#eee}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px system-ui,sans-serif;padding:0 16px 120px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px system-ui,sans-serif;padding:0 16px 170px}
 h1{font-size:20px;margin:16px 0 4px}.sub{color:var(--mut);font-size:13px;margin-bottom:12px}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 .card{background:var(--card);border-radius:12px;padding:12px;display:flex;gap:12px;position:relative}
 .img{width:90px;height:120px;border-radius:8px;background:#8883;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mut);text-align:center}
-.b{flex:1;min-width:0}.name{font-weight:600;overflow-wrap:anywhere}.art{color:var(--mut);font-size:12px}
+.b{flex:1;min-width:0;padding-right:26px}.name{font-weight:600;overflow-wrap:anywhere}.art{color:var(--mut);font-size:12px}
 .price{font-size:20px;font-weight:700;margin:4px 0}.tag{font-size:12px;padding:2px 8px;border-radius:99px;display:inline-block;margin:2px 4px 2px 0;background:#8882}
 .ok{color:var(--ok)}.bad{color:var(--bad)}a{color:inherit}.chk{position:absolute;top:10px;right:12px;width:22px;height:22px}
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);padding:12px 16px;border-top:1px solid #8884;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.bar b{font-size:18px}button{background:var(--acc);color:var(--bg);border:0;border-radius:8px;padding:10px 14px;font:inherit}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #8884;display:flex;flex-direction:column;gap:8px}
+.bar b{font-size:18px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row.top{justify-content:space-between}
+button{background:var(--acc);color:var(--bg);border:0;border-radius:8px;padding:10px 12px;font:inherit;flex:1}
+button.sec{background:#8883;color:var(--fg)}button.del{background:var(--bad);color:#fff}button:disabled{opacity:.4}
+#rest{background:none;color:var(--mut);text-decoration:underline;padding:0;flex:none;margin-left:8px}
+#rep{display:none}
+@media print{body>*:not(#rep){display:none!important}#rep{display:block;color:#000;background:#fff;padding:0}
+#rep table{width:100%;border-collapse:collapse;font-size:12px}#rep td,#rep th{border-bottom:1px solid #999;padding:4px;text-align:left;vertical-align:top;overflow-wrap:anywhere}}
 </style></head><body>
-<h1>Lefties tracker</h1><div class="sub" id="upd"></div>
+<h1>Ropa tracker</h1><div class="sub"><span id="upd"></span><button id="rest" hidden></button></div>
 <div class="grid" id="g"></div>
-<div class="bar"><div><span id="n">0</span> prendas · <b id="t">0,00 €</b></div><button id="clr">Vaciar</button></div>
+<div id="rep"></div>
+<div class="bar">
+  <div class="row top"><div><span id="n">0</span> prendas · <b id="t">0,00 €</b></div></div>
+  <div class="row">
+    <button id="del" class="del" disabled>Eliminar selección</button>
+    <button id="mail" class="sec" disabled>Informe por correo</button>
+    <button id="pdf" class="sec" disabled>PDF</button>
+    <button id="clr" class="sec">Desmarcar</button>
+  </div>
+</div>
 <script>
-const KEY="lefties_cart",fmt=n=>n.toFixed(2).replace(".",",")+" €";
-let cart;try{cart=new Set(JSON.parse(localStorage.getItem(KEY)||"[]"))}catch(e){cart=new Set()}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...cart]))}catch(e){}};
-let items=[];
+const K_CART="lefties_cart",K_HID="lefties_hidden",K_MAIL="lefties_mail",fmt=n=>n.toFixed(2).replace(".",",")+" €";
+const load=k=>{try{return new Set(JSON.parse(localStorage.getItem(k)||"[]"))}catch(e){return new Set()}};
+const store=(k,s)=>{try{localStorage.setItem(k,JSON.stringify([...s]))}catch(e){}};
+let cart=load(K_CART),hidden=load(K_HID),items=[];
+const $=id=>document.getElementById(id);
 function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function safeUrl(u){return /^https?:\/\//.test(u||"")?u:""}
+const visible=()=>items.filter(i=>!hidden.has(i.art));
+const selected=()=>visible().filter(i=>cart.has(i.art));
 function render(){
-  const g=document.getElementById("g");g.innerHTML="";
-  items.forEach(it=>{
-    const h=it.history,first=h[0].price,max=Math.max(...h.map(x=>x.price)),d=it.price-max;
+  const g=$("g");g.innerHTML="";
+  visible().forEach(it=>{
+    const h=it.history,max=Math.max(...h.map(x=>x.price)),d=it.price-max;
     let size="<span class='tag'>talla: sin datos</span>";
     if(it.in_my_size)size=it.in_my_size.length?`<span class='tag ok'>✔ tu talla: ${esc(it.in_my_size.join(", "))}</span>`:`<span class='tag bad'>✘ tu talla agotada</span>`;
-    const img=it.image?`<img class="img" referrerpolicy="no-referrer" src="${esc(safeUrl(it.image))}" alt="" loading="lazy">`:`<div class="img">${esc(it.art)}</div>`;
+    const img=it.image?`<img class="img" referrerpolicy="no-referrer" src="${esc(safeUrl(it.image)||it.image)}" alt="" loading="lazy">`:`<div class="img">${esc(it.art)}</div>`;
     const url=safeUrl(it.url);
     const c=document.createElement("div");c.className="card";
     c.innerHTML=`${img}<div class="b"><div class="name">${esc(it.name)}</div><div class="art">${esc(it.art)} · ${esc(it.store)}</div>
     <div class="price">${it.original_price&&it.original_price>it.price?`<s class="art">${fmt(it.original_price)}</s> `:""}${fmt(it.price)} ${d<0?`<small class='ok'>${fmt(d)}</small>`:""}</div>
     ${size}<span class="tag">busco: ${esc(it.wanted.join("/"))}</span>
-    <div class="art">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">Ver en Lefties</a>`:"sin URL"} · ${esc(it.status==="ok"?"ok":"⚠ "+it.status)}</div></div>
+    <div class="art">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">Ver en ${esc(it.store)}</a>`:"sin URL"} · ${esc(it.status==="ok"?"ok":"⚠ "+it.status)}</div></div>
     <input class="chk" type="checkbox" ${cart.has(it.art)?"checked":""}>`;
-    c.querySelector(".chk").onchange=e=>{e.target.checked?cart.add(it.art):cart.delete(it.art);save();total()};
+    c.querySelector(".chk").onchange=e=>{e.target.checked?cart.add(it.art):cart.delete(it.art);store(K_CART,cart);total()};
     g.appendChild(c)});
+  $("rest").hidden=!hidden.size;$("rest").textContent=hidden.size?`Restaurar ${hidden.size} oculta(s)`:"";
   total()}
-function total(){const s=items.filter(i=>cart.has(i.art));
-  document.getElementById("n").textContent=s.length;
-  document.getElementById("t").textContent=fmt(s.reduce((a,i)=>a+i.price,0))}
-document.getElementById("clr").onclick=()=>{cart.clear();save();render()};
+function total(){const s=selected();
+  $("n").textContent=s.length;$("t").textContent=fmt(s.reduce((a,i)=>a+i.price,0));
+  ["del","mail","pdf"].forEach(id=>$(id).disabled=!s.length)}
+function report(){
+  const s=selected(),sum=s.reduce((a,i)=>a+i.price,0),
+  d=new Date().toLocaleDateString("es-ES");
+  const lines=s.map((i,n)=>`${n+1}. ${i.name} (${i.art})\n   Tienda: ${i.store}\n   Precio: ${fmt(i.price)}\n   URL: ${safeUrl(i.url)||"sin URL"}`);
+  return {s,sum,d,text:`Informe de compra (${d})\n\n${lines.join("\n\n")}\n\nTotal: ${fmt(sum)} (${s.length} prendas)\nSolo informativo.`}}
+$("del").onclick=()=>{const s=selected();if(!s.length)return;
+  if(!confirm(`¿Eliminar ${s.length} prenda(s) de la lista en este dispositivo?`))return;
+  s.forEach(i=>{hidden.add(i.art);cart.delete(i.art)});store(K_HID,hidden);store(K_CART,cart);render()};
+$("rest").onclick=()=>{hidden.clear();store(K_HID,hidden);render()};
+$("clr").onclick=()=>{cart.clear();store(K_CART,cart);render()};
+$("mail").onclick=()=>{const r=report();let to="";
+  try{to=localStorage.getItem(K_MAIL);if(to===null){to=prompt("Correo de destino (se guarda solo en este dispositivo; vacío = lo eliges tú en tu app de correo):","")||"";localStorage.setItem(K_MAIL,to)}}catch(e){to=""}
+  const url=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent("Informe de compra "+r.d)}&body=${encodeURIComponent(r.text)}`;
+  if(url.length>7000){navigator.clipboard?.writeText(r.text);alert("Informe muy largo para el correo: copiado al portapapeles, pégalo en un correo nuevo.");return}
+  location.href=url};
+$("pdf").onclick=()=>{const r=report();
+  $("rep").innerHTML=`<h2>Informe de compra (${esc(r.d)})</h2><table><tr><th>#</th><th>Prenda</th><th>Tienda</th><th>Precio</th><th>URL</th></tr>${
+    r.s.map((i,n)=>`<tr><td>${n+1}</td><td>${esc(i.name)}<br>${esc(i.art)}</td><td>${esc(i.store)}</td><td>${fmt(i.price)}</td><td>${esc(safeUrl(i.url)||"sin URL")}</td></tr>`).join("")
+  }<tr><th colspan="3">Total (${r.s.length})</th><th colspan="2">${fmt(r.sum)}</th></tr></table><p>Solo informativo.</p>`;
+  window.print()};
 fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{items=d.items;
-  document.getElementById("upd").textContent="Actualizado: "+new Date(d.updated).toLocaleString("es-ES");render()})
- .catch(()=>document.getElementById("upd").textContent="No se pudo cargar data.json");
+  $("upd").textContent="Actualizado: "+new Date(d.updated).toLocaleString("es-ES");render()})
+ .catch(()=>$("upd").textContent="No se pudo cargar data.json");
 </script></body></html>

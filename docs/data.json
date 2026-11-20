@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T21:31+00:00",
+ "updated": "2026-11-20T21:36+00:00",
  "items": [
   {
    "art": "5052/543/406",
@@ -22,7 +22,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T21:31+00:00",
+   "last_checked": "2026-11-20T21:36+00:00",
    "original_price": null
   },
   {
@@ -46,7 +46,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 17.99,
-   "last_checked": "2026-11-20T21:31+00:00",
+   "last_checked": "2026-11-20T21:36+00:00",
    "original_price": null
   },
   {
@@ -70,7 +70,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:31+00:00",
+   "last_checked": "2026-11-20T21:36+00:00",
    "original_price": null
   },
   {
@@ -94,7 +94,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 15.99,
-   "last_checked": "2026-11-20T21:31+00:00",
+   "last_checked": "2026-11-20T21:36+00:00",
    "original_price": null
   },
   {
@@ -118,7 +118,7 @@
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:31+00:00",
+   "last_checked": "2026-11-20T21:36+00:00",
    "original_price": null
   },
   {
@@ -131,7 +131,7 @@
     }
    ],
    "type": "top",
-   "store": "Desconocida",
+   "store": "Álvaro Moreno",
    "original_price": null,
    "label_size": "S",
    "wanted": [
@@ -139,11 +139,11 @@
     "L"
    ],
    "name": "Sudadera Fusion I26 granate",
-   "url": "",
+   "url": "https://link.alvaromoreno.com/1004226122_BUR",
    "image": "",
-   "status": "error: sin URL: añádela en items.json",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.95,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "5536/340/251",
@@ -163,11 +163,11 @@
     "L"
    ],
    "name": "Polo punto crudo",
-   "url": "",
+   "url": "http://www.zara.com/qr/0553634025102",
    "image": "",
-   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "6318/327/807",
@@ -187,11 +187,11 @@
     "L"
    ],
    "name": "Jersey punto gris texturizado",
-   "url": "",
+   "url": "http://www.zara.com/qr/0631832780702",
    "image": "",
-   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 39.95,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "2697/693/806",
@@ -211,11 +211,11 @@
     "L"
    ],
    "name": "Jersey beige cuello alto",
-   "url": "",
+   "url": "https://www.bershka.com/4bk/0269769380602",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "0761/360/251",
@@ -235,11 +235,11 @@
     "L"
    ],
    "name": "Sudadera blanca media cremallera",
-   "url": "",
+   "url": "http://www.zara.com/qr/0076136025103?gtin=8447741555727&gmn=844523460-51QSLRG",
    "image": "",
-   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "0526/325/700",
@@ -259,11 +259,11 @@
     "L"
    ],
    "name": "Polo marrón con cuello crudo",
-   "url": "",
+   "url": "http://www.zara.com/qr/0052632570003?gtin=8447740261117&gmn=844523460-51WPHRV",
    "image": "",
-   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "status": "error: <urlopen error [Errno -2] Name or service not known>",
    "price": 29.95,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "3211/500/251",
@@ -283,11 +283,11 @@
     "L"
    ],
    "name": "Prenda waffle blanca/azul Rally Team",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0321150025103",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "3235/501/403",
@@ -307,11 +307,11 @@
     "L"
    ],
    "name": "Camiseta rayas marrón/azul",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0323550140303",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7210/538/104",
@@ -331,11 +331,11 @@
     "L"
    ],
    "name": "Polo rugby blanco/marino",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0721053810403",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 27.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7721/517/800",
@@ -355,11 +355,11 @@
     "L"
    ],
    "name": "Plumífero negro brillante",
-   "url": "",
+   "url": "https://www.pullandbear.com/share/-l07721517?cS=800",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 25.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7231/560/250",
@@ -379,11 +379,11 @@
     "L"
    ],
    "name": "Camiseta blanca Beat & ...",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0723156025003",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7558/508/800",
@@ -403,11 +403,11 @@
     "L"
    ],
    "name": "Prenda negra 7558/508 (¿jogger o sudadera?)",
-   "url": "",
+   "url": "https://www.pullandbear.com/share/-l07558508?cS=800",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7670/509/803",
@@ -427,11 +427,11 @@
     "L"
    ],
    "name": "Jogger gris",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0767050980305",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 19.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7558/508/700",
@@ -451,11 +451,11 @@
     "L"
    ],
    "name": "Prenda marrón 7558/508 (¿jogger o sudadera?)",
-   "url": "",
+   "url": "https://www.pullandbear.com/share/-l07558508?cS=700",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 22.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   },
   {
    "art": "7210/521/752",
@@ -475,11 +475,11 @@
     "L"
    ],
    "name": "Polo punto beige World Community",
-   "url": "",
+   "url": "https://www.pullandbear.com/qr/0721052175205",
    "image": "",
    "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
    "price": 29.99,
-   "last_checked": "2026-11-20T21:31+00:00"
+   "last_checked": "2026-11-20T21:36+00:00"
   }
  ]
 }
