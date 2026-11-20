@@ -1,0 +1,120 @@
+{
+ "updated": "2026-11-20T11:11+00:00",
+ "items": [
+  {
+   "art": "5052/543/406",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 17.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Lefties",
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Ref. 5052/543/406",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 17.99,
+   "last_checked": "2026-11-20T11:11+00:00"
+  },
+  {
+   "art": "1048/502/800",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 17.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Lefties",
+   "label_size": "S",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Ref. 1048/502/800",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 17.99,
+   "last_checked": "2026-11-20T11:11+00:00"
+  },
+  {
+   "art": "5922/555/800",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 22.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "bottom",
+   "store": "Lefties",
+   "label_size": "40",
+   "wanted": [
+    "40",
+    "42"
+   ],
+   "name": "Pantalón negro (5922/555)",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 22.99,
+   "last_checked": "2026-11-20T11:11+00:00"
+  },
+  {
+   "art": "1028/507/716",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 15.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "top",
+   "store": "Lefties",
+   "label_size": "L",
+   "wanted": [
+    "M",
+    "L"
+   ],
+   "name": "Ref. 1028/507/716",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 15.99,
+   "last_checked": "2026-11-20T11:11+00:00"
+  },
+  {
+   "art": "5922/555/700",
+   "history": [
+    {
+     "date": "2026-11-20",
+     "price": 22.99,
+     "source": "etiqueta"
+    }
+   ],
+   "type": "bottom",
+   "store": "Lefties",
+   "label_size": "38",
+   "wanted": [
+    "40",
+    "42"
+   ],
+   "name": "Pantalón granate/marrón (5922/555)",
+   "url": "",
+   "image": "",
+   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "price": 22.99,
+   "last_checked": "2026-11-20T11:11+00:00"
+  }
+ ]
+}
