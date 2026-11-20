@@ -31,7 +31,7 @@ function render(){
     const h=it.history,first=h[0].price,max=Math.max(...h.map(x=>x.price)),d=it.price-max;
     let size="<span class='tag'>talla: sin datos</span>";
     if(it.in_my_size)size=it.in_my_size.length?`<span class='tag ok'>✔ tu talla: ${esc(it.in_my_size.join(", "))}</span>`:`<span class='tag bad'>✘ tu talla agotada</span>`;
-    const img=it.image?`<img class="img" src="${esc(safeUrl(it.image))}" alt="" loading="lazy">`:`<div class="img">${esc(it.art)}</div>`;
+    const img=it.image?`<img class="img" referrerpolicy="no-referrer" src="${esc(safeUrl(it.image))}" alt="" loading="lazy">`:`<div class="img">${esc(it.art)}</div>`;
     const url=safeUrl(it.url);
     const c=document.createElement("div");c.className="card";
     c.innerHTML=`${img}<div class="b"><div class="name">${esc(it.name)}</div><div class="art">${esc(it.art)} · ${esc(it.store)}</div>

@@ -37,6 +37,11 @@ class T(unittest.TestCase):
         with mock.patch.object(track, "find_url", return_value=None):
             rec, _ = track.check_item({**ITEM, "url": ""}, None, date(2026, 11, 27))
         self.assertIn("sin URL", rec["status"])
+    def test_image_downloaded(self):
+        with mock.patch.object(track, "fetch", return_value=page("12.99")), \
+             mock.patch.object(track, "download_image", return_value="img/x.jpg") as d:
+            rec, _ = track.check_item(ITEM, None, date(2026, 11, 27))
+        self.assertEqual(rec["image"], "img/x.jpg"); d.assert_called_once()
     def test_email(self):
         a = [{"name": "n", "old": 15.99, "new": 12.99, "url": "u", "art": "a", "in_my_size": ["M"]}]
         env = {"SMTP_USER": "u@x", "SMTP_PASS": "p", "EMAIL_TO": "t@x"}

@@ -19,6 +19,26 @@ def fetch(url):
         return r.read().decode("utf-8", "replace")
 
 
+def download_image(url, art, referer):
+    """Guarda la foto en docs/img/ (evita hotlinking bloqueado). Devuelve ruta relativa o None."""
+    slug = re.sub(r"\W+", "-", art).strip("-")
+    img_dir = ROOT / "docs" / "img"
+    for f in img_dir.glob(slug + ".*"):
+        return "img/" + f.name
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA, "Referer": referer})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            ctype, data = r.headers.get("Content-Type", ""), r.read(3_000_000)
+        ext = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}.get(ctype.split(";")[0])
+        if not ext or len(data) < 500:
+            return None
+        img_dir.mkdir(parents=True, exist_ok=True)
+        (img_dir / (slug + ext)).write_bytes(data)
+        return "img/" + slug + ext
+    except Exception:
+        return None
+
+
 def _walk(o):
     if isinstance(o, dict):
         yield o
@@ -131,7 +151,8 @@ def check_item(item, prev, today):
         if info["name"] and not item.get("name"):
             rec["name"] = info["name"]
         if info["image"] and not item.get("photo"):
-            rec["image"] = info["image"]
+            img = urllib.parse.urljoin(url, info["image"])
+            rec["image"] = download_image(img, item["art"], url) or img
         rec["stock"] = info["stock"]
         rec["in_my_size"] = in_my_size(info["stock"], rec["wanted"])
         last = rec["history"][-1]["price"]
