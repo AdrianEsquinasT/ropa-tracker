@@ -159,7 +159,7 @@ form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;bord
  <label>Foto (enlace de la imagen)<input id="f_photo" type="url" placeholder="https://…jpg"></label>
  <div class="hint">En la web de la tienda, mantén pulsada la foto y elige <b>Copiar enlace de la imagen</b>.</div>
  <label>Descripción<textarea id="f_desc" rows="2" placeholder="Para recordar cuál era"></textarea></label>
- <div class="act"><button value="cancel" class="b2" type="submit">Cancelar</button>
+ <div class="act"><button value="cancel" class="b2" type="submit" formnovalidate>Cancelar</button>
   <button id="f_ok" value="ok" class="b1" type="submit">Añadir</button></div>
  <div class="hint">Se guarda en este dispositivo. Para tenerlo en todos, usa <b>Exportar añadidos</b> y pega el texto en <code>items.json</code>.</div>
 </form></dialog>
@@ -296,11 +296,18 @@ $("pdf").onclick=()=>{const r=report();let n=0;
   <div class="ft">Generado desde la Cesta de deseos.</div>`;
  setTimeout(()=>window.print(),60)};
 
-$("f_cat").onchange=e=>{$("l_size").textContent=e.target.value==="perfumes"?"Tamaño (ml)":
- e.target.value==="relojes"?"Tamaño (mm)":"Talla"};
+const SZ={ropa:["Talla","M"],relojes:["Caja (mm)","42"],perfumes:["Tamaño (ml)","100"]};
+$("f_cat").onchange=e=>{const[l,ph]=SZ[e.target.value]||SZ.ropa;
+ $("l_size").textContent=l;$("f_size").placeholder=ph;
+ $("f_name").placeholder={ropa:"Sudadera negra con capucha",relojes:"Casio A168WA plateado",
+  perfumes:"Dior Sauvage EDT"}[e.target.value];
+ $("f_store").placeholder={ropa:"Zara",relojes:"Casio",perfumes:"Druni"}[e.target.value];
+ $("f_desc").placeholder={ropa:"Para recordar cuál era",relojes:"Digital retro, correa de acero",
+  perfumes:"Aromático, bergamota y pimienta"}[e.target.value]};
 $("add").onclick=()=>{$("f_cat").value=cat;$("f_cat").onchange({target:$("f_cat")});$("dlg").showModal()};
+const clearForm=()=>["f_name","f_price","f_art","f_size","f_url","f_photo","f_desc"].forEach(i=>$(i).value="");
 $("dlg").addEventListener("close",()=>{const d=$("dlg");
- if(d.returnValue!=="ok")return;
+ if(d.returnValue!=="ok"){clearForm();return}
  const v=id=>$(id).value.trim(),p=parseFloat(v("f_price").replace(",","."));
  if(!v("f_name")||!(p>=0))return;
  const it={art:v("f_art")||"m"+Date.now().toString(36),noref:!v("f_art"),store:v("f_store")||"—",category:v("f_cat"),
@@ -308,7 +315,7 @@ $("dlg").addEventListener("close",()=>{const d=$("dlg");
   url:v("f_url"),photo:v("f_photo"),name:v("f_name"),desc:v("f_desc"),wanted:[],
   added:new Date().toISOString().slice(0,10)};
  local.push(it);ls.s(K.loc,JSON.stringify(local));
- ["f_name","f_price","f_art","f_size","f_url","f_photo","f_desc"].forEach(i=>$(i).value="");
+ clearForm();
  cat=it.category;ls.s("ropa_tab",cat);merge();tabs();filters();grid()});
 
 fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
