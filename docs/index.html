@@ -23,8 +23,9 @@ h1{font-size:clamp(19px,5vw,26px);margin:0;letter-spacing:-.02em}
 .tabs button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:600;padding:9px 6px;border-radius:9px;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--card);color:var(--fg);box-shadow:var(--shadow)}
 .tabs small{display:block;font-weight:400;font-size:11px;opacity:.75}
-.stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;flex:1 1 90px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0 4px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
 .stat b{display:block;font-size:17px;letter-spacing:-.01em}
 .stat span{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
 .tools{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px}
@@ -44,10 +45,15 @@ input,select,textarea{font:inherit;color:var(--fg);background:var(--card);border
  padding:12px;box-shadow:var(--shadow);transition:transform .12s,border-color .12s}
 .card:hover{transform:translateY(-2px);border-color:var(--mut)}
 .card.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset,var(--shadow)}
-.ph{position:relative;flex:none;width:92px;height:124px;border-radius:10px;overflow:hidden;background:var(--chip);
+.pw{position:relative;flex:none;width:92px;height:124px}
+.cam{position:absolute;right:5px;bottom:5px;width:28px;height:28px;border:0;border-radius:50%;cursor:pointer;
+ background:rgba(0,0,0,.55);color:#fff;font-size:14px;line-height:28px;padding:0;text-align:center;backdrop-filter:blur(4px)}
+.cam:hover{background:rgba(0,0,0,.78)}
+.ph{position:relative;display:block;width:100%;height:100%;border-radius:10px;overflow:hidden;background:var(--chip);
  display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--mut)}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .ph .noimg{font-size:10px;text-align:center;padding:6px;overflow-wrap:anywhere}
+.ph{display:flex;align-items:center;justify-content:center}
 .off{position:absolute;top:6px;left:6px;background:var(--bad);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px}
 .b{flex:1;min-width:0;padding-right:28px;display:flex;flex-direction:column;gap:2px}
 .store{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut);font-weight:700}
@@ -143,6 +149,7 @@ form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;bord
  </div>
 </div></div>
 
+<input type="file" id="file" accept="image/*" hidden>
 <dialog id="dlg"><form class="fm" method="dialog">
  <h3>Añadir a la cesta</h3>
  <label>Categoría<select id="f_cat"><option value="ropa">Ropa</option><option value="relojes">Relojes</option><option value="perfumes">Perfumes</option></select></label>
@@ -165,7 +172,7 @@ form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;bord
 </form></dialog>
 
 <script>
-const K={cart:"lefties_cart",hid:"lefties_hidden",mail:"lefties_mail",th:"ropa_theme",loc:"ropa_local"};
+const K={cart:"lefties_cart",hid:"lefties_hidden",mail:"lefties_mail",th:"ropa_theme",loc:"ropa_local",pho:"ropa_fotos"};
 const CATS=[["ropa","Ropa"],["relojes","Relojes"],["perfumes","Perfumes"]];
 const fmt=n=>n.toFixed(2).replace(".",",")+" €";
 const ls={g(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
@@ -178,7 +185,22 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const safe=u=>/^https?:\/\//.test(u||"")?u:"";
 const link=i=>safe(i.final_url)||safe(i.url);
-const pic=i=>{const p=i.image||i.photo||"";return safe(p)||(/^img\//.test(p)?p:"")};
+let photos={};try{photos=JSON.parse(ls.g(K.pho,"{}"))}catch(e){}
+const pic=i=>{if(photos[i.art])return photos[i.art];
+ const p=i.image||i.photo||"";return safe(p)||(/^img\//.test(p)?p:"")};
+function shrink(file,max){return new Promise((ok,no)=>{const fr=new FileReader();
+ fr.onerror=()=>no(new Error("no se pudo leer el archivo"));
+ fr.onload=()=>{const im=new Image();im.onerror=()=>no(new Error("formato de imagen no admitido"));
+  im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+   c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+   c.getContext("2d").drawImage(im,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",.72))};
+  im.src=fr.result};
+ fr.readAsDataURL(file)})}
+let photoFor=null;
+$("file").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f||!photoFor)return;
+ try{const d=await shrink(f,520);photos[photoFor]=d;ls.s(K.pho,JSON.stringify(photos));
+  if(ls.g(K.pho,"")!==JSON.stringify(photos))throw new Error("sin espacio");grid()}
+ catch(err){alert("No se pudo guardar la foto: "+err.message);delete photos[photoFor]}};
 if(ls.g(K.th,""))document.documentElement.dataset.theme=ls.g(K.th,"");
 $("theme").onclick=()=>{const d=document.documentElement,
  cur=d.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
@@ -224,8 +246,10 @@ function grid(){
   const c=document.createElement("div");c.className="card"+(cart.has(it.art)?" on":"");
   const im=src?`<img src="${esc(src)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
    :`<span class="noimg">sin foto${it.art&&!it.noref?"<br>"+esc(it.art):""}</span>`;
-  const ph=u?`<a class="ph" href="${esc(u)}" target="_blank" rel="noopener">${im}${pct?`<span class="off">-${pct}%</span>`:""}</a>`
-   :`<div class="ph">${im}${pct?`<span class="off">-${pct}%</span>`:""}</div>`;
+  const inner=`${im}${pct?`<span class="off">-${pct}%</span>`:""}`;
+  const ph=`<div class="pw">`+(u?`<a class="ph" href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>`
+   :`<div class="ph">${inner}</div>`)+
+   `<button class="cam" title="${photos[it.art]?"Cambiar o quitar la foto":"Añadir foto del carrete"}">${photos[it.art]?"⟳":"+"}</button></div>`;
   let sz="";
   if(it.wanted&&it.wanted.length)sz=it.in_my_size?(it.in_my_size.length
     ?`<span class="tag ok">✔ ${esc(it.in_my_size.join(", "))}</span>`:`<span class="tag bad">✘ tu talla agotada</span>`)
@@ -241,6 +265,10 @@ function grid(){
     ${it._local?`<span class="tag warn">solo en este móvil</span>`:""}</div>
    ${u?`<a class="go" href="${esc(u)}" target="_blank" rel="noopener">Abrir en ${esc(it.store||"la tienda")} ↗</a>`:`<span class="go dis">sin enlace</span>`}
   </div><input class="chk" type="checkbox" aria-label="Seleccionar" ${cart.has(it.art)?"checked":""}>`;
+  c.querySelector(".cam").onclick=ev=>{ev.preventDefault();ev.stopPropagation();
+   if(photos[it.art]&&confirm("Esta foto ya tiene una imagen tuya. ¿Quitarla?\n\nCancelar = elegir otra foto")){
+    delete photos[it.art];ls.s(K.pho,JSON.stringify(photos));return grid()}
+   photoFor=it.art;$("file").click()};
   c.querySelector(".chk").onchange=e=>{e.target.checked?cart.add(it.art):cart.delete(it.art);
    c.classList.toggle("on",e.target.checked);putSet(K.cart,cart);total()};
   g.appendChild(c)});
