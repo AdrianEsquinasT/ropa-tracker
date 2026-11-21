@@ -8,7 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ITEMS = ROOT / "items.json"
 DATA = ROOT / "docs" / "data.json"
-WANTED = {"top": ["M", "L"], "bottom": ["40", "42"], "shoe": ["40.5", "41", "41.5", "42"]}
+WANTED = {"top": ["M", "L"], "bottom": ["40", "42"], "shoe": ["40.5", "41", "41.5", "42"],
+          "watch": [], "perfume": []}
+CATEGORIES = ("ropa", "relojes", "perfumes")
 BLACK_FRIDAY = (date(2026, 11, 20), date(2026, 12, 1))
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
@@ -130,8 +132,10 @@ def build_record(item, prev, today):
     }
     rec.update({
         "type": item["type"], "store": item.get("store", "Lefties"),
+        "category": item.get("category", "ropa"),
         "original_price": item.get("label_original"), "label_size": item.get("label_size"),
-        "wanted": WANTED[item["type"]],
+        "wanted": item.get("wanted", WANTED.get(item["type"], [])),
+        "desc": item.get("desc", ""),
         "name": item.get("name") or rec.get("name") or "Ref. " + item["art"],
         "url": item.get("url") or rec.get("url") or "",
         "image": item.get("photo") or rec.get("image") or "",
@@ -168,6 +172,8 @@ def check_item(item, prev, today):
         rec["status"] = "ok"
     except Exception as e:  # un fallo no debe tumbar al resto
         rec["status"] = "error: %s" % e
+    if not rec["wanted"]:                      # relojes y perfumes no tienen talla
+        rec["in_my_size"] = None
     rec["price"] = rec["history"][-1]["price"]
     rec["last_checked"] = datetime.now(timezone.utc).isoformat(timespec="minutes")
     return rec, alert

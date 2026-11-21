@@ -4,50 +4,80 @@
   "type": "top",
   "label_price": 17.99,
   "label_size": "S",
-  "url": "",
-  "name": "",
-  "photo": "",
-  "store": "Lefties"
+  "url": "https://www.lefties.com/share/-l05052543?cS=406",
+  "name": "Camiseta rayas azul/blanco",
+  "store": "Lefties",
+  "category": "ropa",
+  "desc": "Camiseta de rayas azules y blancas de manga larga.",
+  "wanted": [
+   "M",
+   "L"
+  ],
+  "photo": ""
  },
  {
   "art": "1048/502/800",
   "type": "top",
   "label_price": 17.99,
   "label_size": "S",
-  "url": "",
-  "name": "",
-  "photo": "",
-  "store": "Lefties"
+  "url": "https://www.lefties.com/share/-l01048502?cS=800",
+  "name": "Prenda negra básica",
+  "store": "Lefties",
+  "category": "ropa",
+  "desc": "Prenda básica negra de punto fino.",
+  "wanted": [
+   "M",
+   "L"
+  ],
+  "photo": ""
  },
  {
   "art": "5922/555/800",
   "type": "bottom",
   "label_price": 22.99,
   "label_size": "40",
-  "url": "",
-  "name": "Pantalón negro (5922/555)",
-  "photo": "",
-  "store": "Lefties"
+  "url": "https://www.lefties.com/share/-l05922555?cS=800",
+  "name": "Pantalón ligero negro",
+  "store": "Lefties",
+  "category": "ropa",
+  "desc": "Pantalón negro de tejido ligero, corte recto.",
+  "wanted": [
+   "40",
+   "42"
+  ],
+  "photo": ""
  },
  {
   "art": "1028/507/716",
   "type": "top",
   "label_price": 15.99,
   "label_size": "L",
-  "url": "",
-  "name": "",
-  "photo": "",
-  "store": "Lefties"
+  "url": "https://www.lefties.com/share/-l01028507?cS=716",
+  "name": "Sudadera negra lisa",
+  "store": "Lefties",
+  "category": "ropa",
+  "desc": "Sudadera o camiseta negra lisa de algodón.",
+  "wanted": [
+   "M",
+   "L"
+  ],
+  "photo": ""
  },
  {
   "art": "5922/555/700",
   "type": "bottom",
   "label_price": 22.99,
   "label_size": "38",
-  "url": "",
-  "name": "Pantalón granate/marrón (5922/555)",
-  "photo": "",
-  "store": "Lefties"
+  "url": "https://www.lefties.com/share/-l05922555?cS=700",
+  "name": "Pantalón ligero granate",
+  "store": "Lefties",
+  "category": "ropa",
+  "desc": "Mismo pantalón que el 5922/555/800 en color granate.",
+  "wanted": [
+   "40",
+   "42"
+  ],
+  "photo": ""
  },
  {
   "art": "1004226122",
@@ -56,7 +86,13 @@
   "label_price": 22.95,
   "label_size": "S",
   "url": "https://link.alvaromoreno.com/1004226122_BUR",
-  "name": "Sudadera Fusion I26 granate",
+  "name": "Sudadera Fusion I26 burdeos",
+  "category": "ropa",
+  "desc": "Sudadera Fusion I26 en color burdeos con cremallera.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -65,8 +101,14 @@
   "type": "top",
   "label_price": 29.95,
   "label_size": "S",
-  "url": "http://www.zara.com/qr/0553634025102",
-  "name": "Polo punto crudo",
+  "url": "https://www.zara.com/es/es/polo-punto-relaxed-fit-soft-p05536340.html",
+  "name": "Polo punto relaxed fit soft",
+  "category": "ropa",
+  "desc": "Polo de punto relaxed fit en crudo, botones oscuros.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -75,8 +117,14 @@
   "type": "top",
   "label_price": 39.95,
   "label_size": "S",
-  "url": "http://www.zara.com/qr/0631832780702",
-  "name": "Jersey punto gris texturizado",
+  "url": "https://www.zara.com/es/es/sudadera-polo-waffle-lavado-p06318327.html",
+  "name": "Sudadera polo waffle lavado",
+  "category": "ropa",
+  "desc": "Sudadera tipo polo de tejido waffle lavado, gris azulado.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -85,8 +133,14 @@
   "type": "top",
   "label_price": 29.99,
   "label_size": "S",
-  "url": "https://www.bershka.com/4bk/0269769380602",
-  "name": "Jersey beige cuello alto",
+  "url": "https://www.bershka.com/es/jersey-punto-jacquard-print-c0p226922698.html",
+  "name": "Jersey punto jacquard",
+  "category": "ropa",
+  "desc": "Jersey de punto jacquard en beige, cuello redondo.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -95,8 +149,14 @@
   "type": "top",
   "label_price": 29.95,
   "label_size": "M",
-  "url": "http://www.zara.com/qr/0076136025103?gtin=8447741555727&gmn=844523460-51QSLRG",
-  "name": "Sudadera blanca media cremallera",
+  "url": "https://www.zara.com/es/es/sudadera-cuello-cremallera-basica-p04092360.html",
+  "name": "Sudadera cuello cremallera básica",
+  "category": "ropa",
+  "desc": "Sudadera blanca básica con media cremallera en el cuello.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -105,8 +165,14 @@
   "type": "top",
   "label_price": 29.95,
   "label_size": "M",
-  "url": "http://www.zara.com/qr/0052632570003?gtin=8447740261117&gmn=844523460-51WPHRV",
-  "name": "Polo marrón con cuello crudo",
+  "url": "https://www.zara.com/es/es/polo-pique-rayas-relaxed-fit-p00526325.html",
+  "name": "Polo piqué rayas relaxed fit",
+  "category": "ropa",
+  "desc": "Polo piqué de rayas relaxed fit, marrón con cuello crudo.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -115,8 +181,14 @@
   "type": "top",
   "label_price": 29.99,
   "label_size": "M",
-  "url": "https://www.pullandbear.com/qr/0321150025103",
-  "name": "Prenda waffle blanca/azul Rally Team",
+  "url": "https://www.pullandbear.com/es/-l03211500?cS=251",
+  "name": "Camiseta waffle Rally Team",
+  "category": "ropa",
+  "desc": "Camiseta waffle blanca con ribete azul y bordado Rally Team.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -125,8 +197,14 @@
   "type": "top",
   "label_price": 19.99,
   "label_size": "M",
-  "url": "https://www.pullandbear.com/qr/0323550140303",
+  "url": "https://www.pullandbear.com/es/-l03235501?cS=403",
   "name": "Camiseta rayas marrón/azul",
+  "category": "ropa",
+  "desc": "Camiseta de rayas marrones y azul claro con texto estampado.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -135,8 +213,14 @@
   "type": "top",
   "label_price": 27.99,
   "label_size": "M",
-  "url": "https://www.pullandbear.com/qr/0721053810403",
+  "url": "https://www.pullandbear.com/es/-l07210538?cS=104",
   "name": "Polo rugby blanco/marino",
+  "category": "ropa",
+  "desc": "Polo rugby blanco y azul marino con bordados rojos.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -145,10 +229,16 @@
   "type": "top",
   "label_price": 25.99,
   "label_size": "L",
-  "url": "https://www.pullandbear.com/share/-l07721517?cS=800",
+  "url": "https://www.pullandbear.com/es/-l07721517?cS=800",
   "name": "Plumífero negro brillante",
-  "photo": "",
-  "label_original": 39.99
+  "label_original": 39.99,
+  "category": "ropa",
+  "desc": "Plumífero negro brillante con capucha. Ya rebajado un 35%.",
+  "wanted": [
+   "M",
+   "L"
+  ],
+  "photo": ""
  },
  {
   "art": "7231/560/250",
@@ -156,8 +246,14 @@
   "type": "top",
   "label_price": 19.99,
   "label_size": "M",
-  "url": "https://www.pullandbear.com/qr/0723156025003",
-  "name": "Camiseta blanca Beat & ...",
+  "url": "https://www.pullandbear.com/es/-l07231560?cS=250",
+  "name": "Camiseta blanca Beat & Spirit",
+  "category": "ropa",
+  "desc": "Camiseta blanca con logo Beat & Spirit en relieve.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -166,18 +262,30 @@
   "type": "top",
   "label_price": 22.99,
   "label_size": "L",
-  "url": "https://www.pullandbear.com/share/-l07558508?cS=800",
-  "name": "Prenda negra 7558/508 (¿jogger o sudadera?)",
+  "url": "https://www.pullandbear.com/es/-l07558508?cS=800",
+  "name": "Sudadera negra felpa",
+  "category": "ropa",
+  "desc": "Sudadera negra de felpa, cuello canalé.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
   "art": "7670/509/803",
   "store": "Pull&Bear",
-  "type": "top",
+  "type": "bottom",
   "label_price": 19.99,
   "label_size": "XL",
-  "url": "https://www.pullandbear.com/qr/0767050980305",
-  "name": "Jogger gris",
+  "url": "https://www.pullandbear.com/es/-l07670509?cS=803",
+  "name": "Jogger gris jaspeado",
+  "category": "ropa",
+  "desc": "Pantalón jogger gris jaspeado con cordón.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -186,8 +294,14 @@
   "type": "top",
   "label_price": 22.99,
   "label_size": "S",
-  "url": "https://www.pullandbear.com/share/-l07558508?cS=700",
-  "name": "Prenda marrón 7558/508 (¿jogger o sudadera?)",
+  "url": "https://www.pullandbear.com/es/-l07558508?cS=700",
+  "name": "Sudadera marrón felpa",
+  "category": "ropa",
+  "desc": "Misma sudadera que la 7558/508/800 en color marrón.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  },
  {
@@ -196,8 +310,14 @@
   "type": "top",
   "label_price": 29.99,
   "label_size": "XL",
-  "url": "https://www.pullandbear.com/qr/0721052175205",
-  "name": "Polo punto beige World Community",
+  "url": "https://www.pullandbear.com/es/-l07210521?cS=752",
+  "name": "Polo punto World Community",
+  "category": "ropa",
+  "desc": "Polo de punto beige con texto World Community.",
+  "wanted": [
+   "M",
+   "L"
+  ],
   "photo": ""
  }
 ]
