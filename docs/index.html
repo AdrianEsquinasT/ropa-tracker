@@ -2,6 +2,13 @@
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cesta de deseos</title>
 <meta name="color-scheme" content="light dark">
+<meta name="description" content="Cesta de deseos: ropa, relojes y perfumes que quieres recordar, con precio, tienda y aviso si bajan.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Cesta de deseos">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{--bg:#f4f4f2;--fg:#16161a;--card:#fff;--mut:#6b6b74;--line:#e3e3e0;--acc:#16161a;--acc-fg:#fff;
  --ok:#1a7f37;--bad:#c0392b;--warn:#9a6700;--chip:#ececed;--shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.05);--r:14px}
@@ -15,6 +22,8 @@ body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 -apple-system,
  padding:0 16px calc(176px + env(safe-area-inset-bottom))}
 .wrap{max-width:1180px;margin:0 auto}
 header{padding:18px 0 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.titlerow{display:flex;align-items:center;gap:10px}
+.logo{border-radius:9px;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 h1{font-size:clamp(19px,5vw,26px);margin:0;letter-spacing:-.02em}
 .sub{color:var(--mut);font-size:12px;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
 .sub button{background:none;border:0;color:var(--mut);text-decoration:underline;padding:0;font:inherit;cursor:pointer}
@@ -131,7 +140,8 @@ form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;bord
 </style></head><body>
 <div class="wrap">
 <header>
- <div><h1>Cesta de deseos</h1>
+ <div>
+  <div class="titlerow"><img src="icon-512.png" alt="" width="34" height="34" class="logo"><h1>Cesta de deseos</h1></div>
   <div class="sub"><span id="upd">Cargando…</span><button id="rest" hidden></button><button id="theme">Tema</button><button id="exp" hidden></button></div></div>
  <button id="add">+ Añadir</button>
 </header>
