@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21T14:48+00:00",
+ "updated": "2026-11-23T21:45+00:00",
  "items": [
   {
    "art": "5052/543/406",
@@ -22,11 +22,13 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 17.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "original_price": null,
    "category": "ropa",
    "desc": "Camiseta de rayas azules y blancas de manga larga.",
-   "final_url": "https://www.lefties.com/share/-l05052543?cS=406"
+   "final_url": "https://www.lefties.com/share/-l05052543?cS=406",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "1048/502/800",
@@ -49,11 +51,13 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 17.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "original_price": null,
    "category": "ropa",
    "desc": "Prenda básica negra de punto fino.",
-   "final_url": "https://www.lefties.com/share/-l01048502?cS=800"
+   "final_url": "https://www.lefties.com/share/-l01048502?cS=800",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "5922/555/800",
@@ -76,11 +80,13 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 22.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "original_price": null,
    "category": "ropa",
    "desc": "Pantalón negro de tejido ligero, corte recto.",
-   "final_url": "https://www.lefties.com/share/-l05922555?cS=800"
+   "final_url": "https://www.lefties.com/share/-l05922555?cS=800",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "1028/507/716",
@@ -103,11 +109,13 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 15.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "original_price": null,
    "category": "ropa",
    "desc": "Sudadera o camiseta negra lisa de algodón.",
-   "final_url": "https://www.lefties.com/share/-l01028507?cS=716"
+   "final_url": "https://www.lefties.com/share/-l01028507?cS=716",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "5922/555/700",
@@ -130,11 +138,13 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 22.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "original_price": null,
    "category": "ropa",
    "desc": "Mismo pantalón que el 5922/555/800 en color granate.",
-   "final_url": "https://www.lefties.com/share/-l05922555?cS=700"
+   "final_url": "https://www.lefties.com/share/-l05922555?cS=700",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "1004226122",
@@ -156,11 +166,14 @@
    "name": "Sudadera Fusion I26 burdeos",
    "url": "https://link.alvaromoreno.com/1004226122_BUR",
    "image": "",
-   "status": "error: <urlopen error Tunnel connection failed: 403 Forbidden (agent proxy: no rule or network setting allows this host)>",
+   "status": "error: no se encontró precio en la página",
    "price": 22.95,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
-   "desc": "Sudadera Fusion I26 en color burdeos con cremallera."
+   "desc": "Sudadera Fusion I26 en color burdeos con cremallera.",
+   "noref": false,
+   "final_url": "https://www.alvaromoreno.com/es_es/sudadera-fusion-burdeos-1004226122_BUR.html",
+   "in_my_size": null
   },
   {
    "art": "5536/340/251",
@@ -184,10 +197,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.95,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Polo de punto relaxed fit en crudo, botones oscuros.",
-   "final_url": "https://www.zara.com/es/es/polo-punto-relaxed-fit-soft-p05536340.html"
+   "final_url": "https://www.zara.com/es/es/polo-punto-relaxed-fit-soft-p05536340.html",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "6318/327/807",
@@ -211,10 +226,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 39.95,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Sudadera tipo polo de tejido waffle lavado, gris azulado.",
-   "final_url": "https://www.zara.com/es/es/sudadera-polo-waffle-lavado-p06318327.html"
+   "final_url": "https://www.zara.com/es/es/sudadera-polo-waffle-lavado-p06318327.html",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "2697/693/806",
@@ -238,10 +255,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Jersey de punto jacquard en beige, cuello redondo.",
-   "final_url": "https://www.bershka.com/es/jersey-punto-jacquard-print-c0p226922698.html"
+   "final_url": "https://www.bershka.com/es/jersey-punto-jacquard-print-c0p226922698.html",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "0761/360/251",
@@ -265,10 +284,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.95,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Sudadera blanca básica con media cremallera en el cuello.",
-   "final_url": "https://www.zara.com/es/es/sudadera-cuello-cremallera-basica-p04092360.html"
+   "final_url": "https://www.zara.com/es/es/sudadera-cuello-cremallera-basica-p04092360.html",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "0526/325/700",
@@ -292,10 +313,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.95,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Polo piqué de rayas relaxed fit, marrón con cuello crudo.",
-   "final_url": "https://www.zara.com/es/es/polo-pique-rayas-relaxed-fit-p00526325.html"
+   "final_url": "https://www.zara.com/es/es/polo-pique-rayas-relaxed-fit-p00526325.html",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "3211/500/251",
@@ -319,10 +342,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Camiseta waffle blanca con ribete azul y bordado Rally Team.",
-   "final_url": "https://www.pullandbear.com/es/-l03211500?cS=251"
+   "final_url": "https://www.pullandbear.com/es/-l03211500?cS=251",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "3235/501/403",
@@ -346,10 +371,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 19.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Camiseta de rayas marrones y azul claro con texto estampado.",
-   "final_url": "https://www.pullandbear.com/es/-l03235501?cS=403"
+   "final_url": "https://www.pullandbear.com/es/-l03235501?cS=403",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7210/538/104",
@@ -373,10 +400,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 27.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Polo rugby blanco y azul marino con bordados rojos.",
-   "final_url": "https://www.pullandbear.com/es/-l07210538?cS=104"
+   "final_url": "https://www.pullandbear.com/es/-l07210538?cS=104",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7721/517/800",
@@ -400,10 +429,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 25.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Plumífero negro brillante con capucha. Ya rebajado un 35%.",
-   "final_url": "https://www.pullandbear.com/es/-l07721517?cS=800"
+   "final_url": "https://www.pullandbear.com/es/-l07721517?cS=800",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7231/560/250",
@@ -427,10 +458,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 19.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Camiseta blanca con logo Beat & Spirit en relieve.",
-   "final_url": "https://www.pullandbear.com/es/-l07231560?cS=250"
+   "final_url": "https://www.pullandbear.com/es/-l07231560?cS=250",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7558/508/800",
@@ -454,10 +487,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 22.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Sudadera negra de felpa, cuello canalé.",
-   "final_url": "https://www.pullandbear.com/es/-l07558508?cS=800"
+   "final_url": "https://www.pullandbear.com/es/-l07558508?cS=800",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7670/509/803",
@@ -481,10 +516,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 19.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Pantalón jogger gris jaspeado con cordón.",
-   "final_url": "https://www.pullandbear.com/es/-l07670509?cS=803"
+   "final_url": "https://www.pullandbear.com/es/-l07670509?cS=803",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7558/508/700",
@@ -508,10 +545,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 22.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Misma sudadera que la 7558/508/800 en color marrón.",
-   "final_url": "https://www.pullandbear.com/es/-l07558508?cS=700"
+   "final_url": "https://www.pullandbear.com/es/-l07558508?cS=700",
+   "noref": false,
+   "in_my_size": null
   },
   {
    "art": "7210/521/752",
@@ -535,10 +574,12 @@
    "image": "",
    "status": "error: no se encontró precio en la página",
    "price": 29.99,
-   "last_checked": "2026-11-21T14:48+00:00",
+   "last_checked": "2026-11-23T21:45+00:00",
    "category": "ropa",
    "desc": "Polo de punto beige con texto World Community.",
-   "final_url": "https://www.pullandbear.com/es/-l07210521?cS=752"
+   "final_url": "https://www.pullandbear.com/es/-l07210521?cS=752",
+   "noref": false,
+   "in_my_size": null
   }
  ]
 }
