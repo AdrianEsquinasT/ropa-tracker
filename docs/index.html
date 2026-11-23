@@ -95,6 +95,21 @@ form.fm h3{margin:0;font-size:18px}form.fm label{font-size:12px;color:var(--mut)
 form.fm .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;border-radius:10px;padding:11px;font:inherit;font-weight:600;cursor:pointer}
 .hint{font-size:11px;color:var(--mut);line-height:1.4}
+.quick{background:var(--chip);border-radius:12px;padding:10px;display:grid;gap:8px}
+.quick .row2{display:flex;gap:6px}
+.quick .row2 input{flex:1}
+.quick button{border-radius:8px;padding:9px 12px;font:inherit;font-weight:600;border:0;cursor:pointer;white-space:nowrap}
+.quick button.go{background:var(--acc);color:var(--acc-fg);margin:0;padding:9px 12px;align-self:auto}
+.quick button.scan{background:var(--card);color:var(--fg);border:1px solid var(--line);width:100%}
+.quick button.scan:disabled{opacity:.6}
+.quick .or{font-size:11px;color:var(--mut);text-align:center}
+.detect{font-size:12px;border-radius:8px;padding:7px 9px;display:none;gap:6px;align-items:center}
+.detect.ok{display:flex;background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.detect.bad{display:flex;background:color-mix(in srgb,var(--bad) 13%,transparent);color:var(--bad)}
+.raw{font-size:11px;color:var(--mut);white-space:pre-wrap;max-height:90px;overflow:auto;background:var(--bg);
+ border-radius:8px;padding:6px;font-family:ui-monospace,monospace;display:none}
+.raw.show{display:block}
+.toggle{font-size:11px;color:var(--mut);text-decoration:underline;background:none;border:0;padding:0;cursor:pointer;text-align:left}
 #rep{display:none}
 @media print{@page{margin:14mm}
  body{padding:0;background:#fff;color:#000}body>*:not(#rep){display:none!important}
@@ -150,8 +165,20 @@ form.fm .act{display:flex;gap:8px;margin-top:4px}form.fm .act button{flex:1;bord
 </div></div>
 
 <input type="file" id="file" accept="image/*" hidden>
+<input type="file" id="snap" accept="image/*" capture="environment" hidden>
 <dialog id="dlg"><form class="fm" method="dialog">
  <h3>Añadir a la cesta</h3>
+
+ <div class="quick">
+  <div class="row2"><input id="q_url" placeholder="Pega la URL de la prenda o la referencia (7210/538/104)">
+   <button type="button" class="go" id="q_go">Rellenar</button></div>
+  <div class="detect" id="q_res"></div>
+  <div class="or">o bien</div>
+  <button type="button" class="scan" id="q_scan">📷 Escanear foto de la etiqueta</button>
+  <button type="button" class="toggle" id="q_raw_t" hidden>Ver texto reconocido</button>
+  <div class="raw" id="q_raw"></div>
+ </div>
+
  <label>Categoría<select id="f_cat"><option value="ropa">Ropa</option><option value="relojes">Relojes</option><option value="perfumes">Perfumes</option></select></label>
  <label>Nombre<input id="f_name" required placeholder="Sudadera negra con capucha"></label>
  <div class="two">
@@ -324,6 +351,143 @@ $("pdf").onclick=()=>{const r=report();let n=0;
   <div class="ft">Generado desde la Cesta de deseos.</div>`;
  setTimeout(()=>window.print(),60)};
 
+// ---- Reconocimiento de tienda y referencia a partir de una URL o un texto pegado ----
+const STORE_HOSTS=[[/zara\.com$/,"Zara"],[/pullandbear\.com$/,"Pull&Bear"],[/bershka\.com$/,"Bershka"],
+ [/lefties\.com$/,"Lefties"],[/stradivarius\.com$/,"Stradivarius"],[/oysho\.com$/,"Oysho"],
+ [/massimodutti\.com$/,"Massimo Dutti"],[/mango\.com$/,"Mango"],[/alvaromoreno\.com$/,"Álvaro Moreno"],
+ [/amazon\./,"Amazon"],[/elcorteingles\.es$/,"El Corte Inglés"]];
+const STRIP_TLD=new Set(["com","es","net","org","shop","store","co","uk","io"]);
+function storeFromHost(host){
+ host=host.replace(/^www\./,"");
+ for(const[re,name]of STORE_HOSTS)if(re.test(host))return name;
+ const parts=host.split(".").filter(p=>!STRIP_TLD.has(p));
+ const label=parts.sort((a,b)=>b.length-a.length)[0]||host;
+ return label?label[0].toUpperCase()+label.slice(1):""}
+function titleCase(slug){
+ return slug.replace(/-/g," ").trim().replace(/\s+/g," ")
+  .replace(/^./,c=>c.toUpperCase())}
+// patrones por tienda: de URL -> {art, name}; y de referencia -> URL
+const URL_PATTERNS=[
+ {store:"Zara",re:/zara\.com\/[a-z]{2}\/[a-z]{2}\/([a-z0-9-]*?)-?p0(\d{7})(?:-\d+)?\.html/i,
+  art:m=>m[2].slice(0,4)+"/"+m[2].slice(4,7),name:m=>titleCase(m[1])},
+ {store:"Pull&Bear",re:/pullandbear\.com\/(?:[a-z]{2}\/)?(?:share\/)?-l0(\d{7})/i,
+  art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7)},
+ {store:"Lefties",re:/lefties\.com\/(?:[a-z]{2}\/)?(?:share\/)?-l0(\d{7})/i,
+  art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7)},
+ {store:"Bershka",re:/bershka\.com\/[a-z]{2}\/([a-z0-9-]*?)-c0p0?(\d+)\.html/i,
+  name:m=>titleCase(m[1])},
+ {store:"Álvaro Moreno",re:/alvaromoreno\.com\/(\d+)_([a-z]+)/i,art:m=>m[1]},
+];
+// para generar la URL cuando solo se da tienda + referencia (sin pegar enlace)
+const REF_TO_URL={
+ "Pull&Bear":g=>"https://www.pullandbear.com/es/-l0"+g[0]+g[1]+(g[2]?"?cS="+g[2]:""),
+ "Lefties":g=>"https://www.lefties.com/share/-l0"+g[0]+g[1]+(g[2]?"?cS="+g[2]:""),
+ "Zara":g=>"https://www.zara.com/es/es/-p0"+g[0]+g[1]+".html",
+};
+function splitRef(v){ // "7210/538/104" o "7210 538 104" o "7210538104"
+ const d=v.replace(/[^\d]/g,"");
+ if(d.length>=10)return[d.slice(0,4),d.slice(4,7),d.slice(7,10)];
+ if(d.length===7)return[d.slice(0,4),d.slice(4,7),null];
+ const g=v.split(/[\/\s-]+/).filter(Boolean);
+ return g.length?[g[0]||"",g[1]||"",g[2]||null]:null}
+function looksLikeUrl(v){return /\./.test(v)&&/[a-z]/i.test(v)}
+function detectFromText(v){
+ v=v.trim();if(!v)return null;
+ if(!looksLikeUrl(v)){const g=splitRef(v);if(!g)return null;
+  return{store:"",art:g[2]?g.join("/"):g.slice(0,2).join("/"),name:"",url:"",needStore:true}}
+ try{
+  const u=new URL(/^https?:\/\//.test(v)?v:"https://"+v);
+  const CS_STORES=new Set(["Pull&Bear","Lefties"]);
+  for(const p of URL_PATTERNS){const m=v.match(p.re);if(m){
+   let art=p.art?p.art(m):"";
+   if(CS_STORES.has(p.store)&&art){const cs=v.match(/[?&]cS=(\d+)/i);if(cs)art+="/"+cs[1]}
+   return{store:p.store,art,name:p.name?p.name(m):"",url:v}}}
+  return{store:storeFromHost(u.hostname),art:"",name:"",url:v}
+ }catch(e){return null}}
+$("q_go").onclick=()=>{
+ const r=detectFromText($("q_url").value),box=$("q_res");
+ if(!r){box.className="detect bad";box.textContent="No he reconocido nada en ese texto.";return}
+ if(r.needStore&&!$("f_store").value){
+  box.className="detect bad";box.textContent="Es una referencia. Escribe primero la tienda y vuelve a pulsar Rellenar.";
+  $("f_art").value=r.art;return}
+ if(r.needStore){ // ya hay tienda escrita: generar URL a partir de tienda+referencia
+  const store=$("f_store").value.trim(),gen=REF_TO_URL[store];
+  $("f_art").value=r.art;
+  if(gen){const g=r.art.split("/");$("f_url").value=gen(g);
+   box.className="detect ok";box.textContent="Referencia guardada y enlace de "+store+" generado. Revísalo.";}
+  else{box.className="detect ok";box.textContent="Referencia guardada. No sé generar el enlace de "+(store||"esa tienda")+": pégalo si lo tienes.";}
+  return}
+ if(r.store&&!$("f_store").value)$("f_store").value=r.store;
+ if(r.art)$("f_art").value=r.art;
+ if(r.name&&!$("f_name").value)$("f_name").value=r.name;
+ if(r.url)$("f_url").value=r.url;
+ box.className="detect ok";
+ box.textContent="Detectado: "+(r.store||"tienda desconocida")+(r.art?" · "+r.art:"")+". Revisa los datos antes de añadir."};
+
+// ---- Escaneo de la etiqueta por OCR (en el propio teléfono, nada sale de él) ----
+let ocrReady=null;
+function loadOcr(){
+ if(ocrReady)return ocrReady;
+ ocrReady=new Promise((ok,no)=>{
+  const s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+  s.onload=()=>ok(window.Tesseract);s.onerror=()=>no(new Error("no se pudo cargar el lector"));
+  document.head.appendChild(s)});
+ return ocrReady}
+function rotatedCanvas(img,deg){
+ const c=document.createElement("canvas"),sw=img.naturalWidth,sh=img.naturalHeight,
+  swap=deg%180!==0,k=Math.max(1,1600/Math.max(sw,sh));
+ c.width=Math.round((swap?sh:sw)*k);c.height=Math.round((swap?sw:sh)*k);
+ const x=c.getContext("2d");x.translate(c.width/2,c.height/2);x.rotate(deg*Math.PI/180);x.scale(k,k);
+ x.drawImage(img,-sw/2,-sh/2);return c}
+function ocrScore(t){const T=t.toUpperCase();
+ return(T.match(/ART/g)||[]).length+(T.match(/TALLA|SIZE/g)||[]).length+(t.match(/€/g)||[]).length}
+async function readTag(file){
+ const Tesseract=await loadOcr();
+ const img=await new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;
+  im.src=URL.createObjectURL(file)});
+ let best={score:-1,text:""};
+ for(const deg of[0,90]){
+  const {data}=await Tesseract.recognize(rotatedCanvas(img,deg),"eng");
+  const sc=ocrScore(data.text);if(sc>best.score)best={score:sc,text:data.text}}
+ return best.text}
+function parseTagText(t){
+ const T=t.toUpperCase(),out={};
+ let m=T.match(/ART[:.\s]{1,3}(\d[\d\/\.\s]{4,18}\d)/);
+ if(m){const d=m[1].match(/\d+/g).join("");out.art=d.length>=7?d.slice(0,4)+"/"+d.slice(4,7)+(d.length>=10?"/"+d.slice(7,10):""):m[1].trim()}
+ for(const[re,name]of STORE_HOSTS){const h=name.toUpperCase().replace("&","").replace(/\s/g,"");
+  if(T.includes(h)||T.replace(/\s/g,"").includes(h)){out.store=name;break}}
+ if(!out.store){m=T.match(/WWW\.?\s*([A-Z]{3,20})\.?\s*COM/);if(m)out.store=m[1][0]+m[1].slice(1).toLowerCase()}
+ const prices=[...t.matchAll(/(\d{1,3})[.,](\d{2})(?!\d)/g)].map(x=>parseFloat(x[1]+"."+x[2])).filter(n=>n>0&&n<1000);
+ if(prices.length)out.price=prices[prices.length-1];
+ m=T.match(/\b(XXS|XS|S|M|L|XL|XXL|XXXL)\b/);if(m)out.size=m[1];
+ else{m=T.match(/TALLA[^\d]{0,15}(\d{2})\b/)||T.match(/\b(3[4-9]|4[0-8])\b/);if(m)out.size=m[1]}
+ return out}
+$("q_scan").onclick=()=>$("snap").click();
+$("snap").onchange=async e=>{
+ const f=e.target.files[0];e.target.value="";if(!f)return;
+ const box=$("q_res"),btn=$("q_scan");
+ btn.disabled=true;btn.textContent="Leyendo etiqueta… puede tardar unos segundos";
+ box.className="detect ok";box.textContent="Procesando foto…";
+ try{
+  const text=await readTag(f),r=parseTagText(text);
+  $("q_raw").textContent=text.trim()||"(no se reconoció texto)";
+  $("q_raw_t").hidden=false;
+  if(r.store&&!$("f_store").value)$("f_store").value=r.store;
+  if(r.art)$("f_art").value=r.art;
+  if(r.price!=null&&!$("f_price").value)$("f_price").value=String(r.price).replace(".",",");
+  if(r.size&&!$("f_size").value)$("f_size").value=r.size;
+  const found=["store","art","price","size"].filter(k=>r[k]!=null&&r[k]!=="");
+  if(found.length){box.className="detect ok";
+   box.textContent="He leído: "+found.map(k=>({store:"tienda",art:"referencia",price:"precio",size:"talla"}[k])).join(", ")+
+    ". La foto es casera y la lectura puede fallar: revisa cada campo antes de guardar.";}
+  else{box.className="detect bad";
+   box.textContent="No he podido leer nada claro en la foto. Prueba con más luz y de frente, o rellena a mano. Puedes ver el texto reconocido abajo.";}
+ }catch(err){box.className="detect bad";box.textContent="Fallo al leer la etiqueta: "+err.message}
+ finally{btn.disabled=false;btn.textContent="📷 Escanear foto de la etiqueta"}};
+$("q_raw_t").onclick=()=>{$("q_raw").classList.toggle("show");
+ $("q_raw_t").textContent=$("q_raw").classList.contains("show")?"Ocultar texto reconocido":"Ver texto reconocido"};
+
 const SZ={ropa:["Talla","M"],relojes:["Caja (mm)","42"],perfumes:["Tamaño (ml)","100"]};
 $("f_cat").onchange=e=>{const[l,ph]=SZ[e.target.value]||SZ.ropa;
  $("l_size").textContent=l;$("f_size").placeholder=ph;
@@ -332,8 +496,10 @@ $("f_cat").onchange=e=>{const[l,ph]=SZ[e.target.value]||SZ.ropa;
  $("f_store").placeholder={ropa:"Zara",relojes:"Casio",perfumes:"Druni"}[e.target.value];
  $("f_desc").placeholder={ropa:"Para recordar cuál era",relojes:"Digital retro, correa de acero",
   perfumes:"Aromático, bergamota y pimienta"}[e.target.value]};
-$("add").onclick=()=>{$("f_cat").value=cat;$("f_cat").onchange({target:$("f_cat")});$("dlg").showModal()};
-const clearForm=()=>["f_name","f_price","f_art","f_size","f_url","f_photo","f_desc"].forEach(i=>$(i).value="");
+$("add").onclick=()=>{clearForm();$("f_cat").value=cat;$("f_cat").onchange({target:$("f_cat")});$("dlg").showModal()};
+const clearForm=()=>{["f_name","f_store","f_price","f_art","f_size","f_url","f_photo","f_desc","q_url"].forEach(i=>$(i).value="");
+ $("q_res").className="detect";$("q_res").textContent="";$("q_raw").className="raw";$("q_raw").textContent="";
+ $("q_raw_t").hidden=true;$("q_raw_t").textContent="Ver texto reconocido"};
 $("dlg").addEventListener("close",()=>{const d=$("dlg");
  if(d.returnValue!=="ok"){clearForm();return}
  const v=id=>$(id).value.trim(),p=parseFloat(v("f_price").replace(",","."));
