@@ -150,6 +150,22 @@ a.name:hover{text-decoration:underline;text-underline-offset:3px}
 .card.sale .price .now{color:var(--accent)}
 .price s{font-size:12.5px;color:var(--mut)}
 .price .dn{font-size:11.5px;font-weight:700;color:var(--ok)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));z-index:50;transform:translate(-50%,160%);visibility:hidden;
+ display:flex;align-items:center;gap:12px;width:max-content;max-width:min(540px,calc(100vw - 24px));padding:10px 10px 10px 12px;border-radius:18px;
+ background:var(--ink);color:var(--bg);font:500 14px/1.35 var(--sans);box-shadow:var(--shadow-lg);transition:transform .38s var(--ease),visibility 0s .38s}
+.toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .38s var(--ease)}
+body.has-sel .toast{bottom:calc(206px + env(safe-area-inset-bottom))}
+.toast img{width:38px;height:50px;border-radius:9px;object-fit:cover;flex:none;background:var(--surface-2)}
+.toast .tx{min-width:0}.toast .tx b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast .tx span{opacity:.75;font-size:12.5px}
+.toast button{flex:none;background:none;border:0;color:var(--accent);font:700 14px var(--sans);cursor:pointer;padding:8px 6px;border-radius:8px}
+#syncst{color:var(--mut);text-decoration:none;font-weight:600}
+#syncst.warn{color:var(--warn)}#syncst.bad{color:var(--bad)}#syncst.ok{color:var(--ok)}
+.edit{margin-left:auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface-2);border:0;cursor:pointer;transition:background .2s}
+.edit svg{width:14px;height:14px}.edit:hover{background:var(--line)}
+.edit+.open{margin-left:0}
+form.fm.editing .quick{display:none}
+#f_art[readonly]{opacity:.6}
 .open{margin-left:auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface-2);transition:background .2s,transform .2s var(--ease)}
 .open svg{width:14px;height:14px}
 .open:hover{background:var(--line);transform:translate(1px,-1px)}
@@ -260,9 +276,12 @@ form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{di
 <header>
  <div class="brand">
   <div class="titlerow"><img src="icon-512.png" alt="" width="42" height="42" class="logo"><h1>Cesta de <em>deseos</em></h1></div>
-  <div class="sub"><span id="upd">Cargando…</span><button id="rest" hidden></button><button id="exp" hidden></button></div>
+  <div class="sub"><span id="upd">Cargando…</span><button id="syncst" type="button"></button><button id="rest" hidden></button><button id="exp" hidden></button></div>
  </div>
  <div class="hd-act">
+  <button id="settings" class="icon-btn" type="button" aria-label="Sincronizar entre dispositivos">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 7.97"/><path d="M12 12v7M9 16l3 3 3-3"/></svg>
+  </button>
   <button id="theme" class="icon-btn" type="button" aria-label="Cambiar entre modo claro y oscuro">
    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
@@ -340,6 +359,25 @@ form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{di
  <div class="hint">Se guarda en este dispositivo. Para tenerlo en todos, usa <b>Exportar añadidos</b> y pega el texto en <code>items.json</code>.</div>
 </form></dialog>
 
+<dialog id="cfg" aria-labelledby="cfg_t"><form class="fm" method="dialog">
+ <div class="grab"></div>
+ <h3 id="cfg_t">Sincronizar</h3>
+ <p class="hint" style="font-size:13px;margin:0">Lo que añadas, edites o quites se guardará en tu repositorio de GitHub: aparecerá en todos tus dispositivos y entrará en el seguimiento de precios. La clave se guarda <b>solo en este navegador</b>; repite esto una vez en cada dispositivo.</p>
+ <label>Repositorio<input id="c_repo" placeholder="usuario/repositorio" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
+ <label>Clave de acceso de GitHub<input id="c_tok" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
+ <details class="hint"><summary style="cursor:pointer;font-weight:600;color:var(--ink)">Cómo crear la clave (2 minutos)</summary><ol style="padding-left:18px;margin:8px 0 0">
+  <li>Abre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → nueva clave de acceso (fine-grained)</a>.</li>
+  <li>Nombre: <b>cesta</b>. Caducidad: la que prefieras.</li>
+  <li><b>Repository access</b> → <b>Only select repositories</b> → elige solo este repositorio.</li>
+  <li><b>Permissions</b> → <b>Contents</b>: <b>Read and write</b>. Nada más.</li>
+  <li>Pulsa <b>Generate token</b>, cópiala y pégala arriba.</li></ol></details>
+ <div class="detect" id="c_res"></div>
+ <div class="act"><button value="cancel" class="b2" type="submit" formnovalidate>Cerrar</button>
+  <button id="c_ok" class="b1" type="button">Guardar y probar</button></div>
+ <button id="c_off" type="button" class="toggle" hidden>Desactivar la sincronización en este dispositivo</button>
+</form></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
 const K={cart:"lefties_cart",hid:"lefties_hidden",mail:"lefties_mail",th:"ropa_theme",loc:"ropa_local",pho:"ropa_fotos"};
 const CATS=[["ropa","Ropa"],["relojes","Relojes"],["perfumes","Perfumes"]];
@@ -350,6 +388,7 @@ const ICON={
  perfumes:`<svg ${SV}><rect x="6" y="9" width="12" height="12" rx="3.2"/><path d="M10 9V6.5h4V9M9.5 6.5V3.5h5v3M9 14.5h6"/></svg>`};
 const I_CAM=`<svg ${SV} stroke-width="2"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.3"/></svg>`;
 const I_SWAP=`<svg ${SV} stroke-width="2"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>`;
+const I_EDIT=`<svg ${SV} stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>`;
 const I_EXT=`<svg ${SV} stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>`;
 const hue=s=>{let h=0;for(const c of String(s||""))h=(h*31+c.charCodeAt(0))%360;return h};
 // Color de la prenda deducido de su nombre/descripción, para que el hueco sin foto ya "parezca" la prenda
@@ -406,8 +445,11 @@ $("theme").onclick=()=>{const d=document.documentElement,
  cur=d.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
  d.dataset.theme=cur==="dark"?"light":"dark";ls.s(K.th,d.dataset.theme)};
 
-function merge(){items=[...remote,...local.map(i=>({...i,_local:true,
- history:i.history||[{date:i.added||"",price:i.price,source:"manual"}],status:i.status||"manual"}))]}
+function merge(){
+ const rA=new Set(remote.map(i=>i.art));
+ items=[...remote.map(i=>edits[i.art]?{...i,...edits[i.art]}:i),
+  ...local.filter(i=>!rA.has(i.art)).map(i=>({...i,_local:true,
+   history:i.history||[{date:i.added||"",price:i.price,source:"manual"}],status:i.status||"manual"}))]}
 const vis=()=>items.filter(i=>!hidden.has(i.art));
 const inCat=()=>vis().filter(i=>(i.category||"ropa")===cat);
 const sel=()=>vis().filter(i=>cart.has(i.art));
@@ -448,7 +490,7 @@ function grid(){
    pct=it.original_price>it.price?Math.round((1-it.price/it.original_price)*100):0,
    ct=it.category||"ropa",st=esc(it.store||"la tienda");
   const c=document.createElement("article");
-  c.className="card"+(cart.has(it.art)?" on":"")+(pct?" sale":"");
+  c.className="card"+(cart.has(it.art)?" on":"")+(pct?" sale":"");c.dataset.art=it.art;
   const im=src?`<img src="${esc(src)}" alt="${esc(it.name)}" loading="lazy" referrerpolicy="no-referrer">`
    :`<span class="ph-empty" style="--h:${hue(it.store||it.name)};${swatch(it)||""}">${ICON[ct]||ICON.ropa}</span>`;
   const media=u?`<a class="ph" href="${esc(u)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(it.name)} en ${st}">${im}</a>`
@@ -470,18 +512,21 @@ function grid(){
     ${u?`<a class="name" href="${esc(u)}" target="_blank" rel="noopener">${esc(it.name)}</a>`:`<span class="name">${esc(it.name)}</span>`}
     ${it.desc?`<p class="desc">${esc(it.desc)}</p>`:""}
     <div class="price"><span class="now">${fmt(it.price)}</span>${it.original_price>it.price?`<s>${fmt(it.original_price)}</s>`:""}${dn<0?`<span class="dn">${fmt(dn)}</span>`:""}
+     <button class="edit" type="button" aria-label="Editar ${esc(it.name)}" title="Editar">${I_EDIT}</button>
      ${u?`<a class="open" href="${esc(u)}" target="_blank" rel="noopener" aria-label="Abrir en ${st}" title="Abrir en ${st}">${I_EXT}</a>`:""}</div>
-    <div class="meta">${sz}${showRef?`<span class="ref">${esc(it.art)}</span>`:""}${it._local?`<span class="chip warn">Solo en este móvil</span>`:""}</div>
+    <div class="meta">${sz}${showRef?`<span class="ref">${esc(it.art)}</span>`:""}${it._local&&!it.synced?`<span class="chip warn">${syncOn()?"Subiendo…":"Solo en este móvil"}</span>`:""}</div>
    </div>`;
   c.querySelector(".cam").onclick=ev=>{ev.preventDefault();ev.stopPropagation();
    if(photos[it.art]&&confirm("Esta prenda ya tiene una foto tuya. ¿Quitarla?\n\nCancelar = elegir otra foto")){
     delete photos[it.art];ls.s(K.pho,JSON.stringify(photos));return grid()}
    photoFor=it.art;$("file").click()};
+  c.querySelector(".edit").onclick=()=>openEdit(it);
   c.querySelector(".chk").onchange=e=>{e.target.checked?cart.add(it.art):cart.delete(it.art);
    c.classList.toggle("on",e.target.checked);putSet(K.cart,cart);total()};
   g.appendChild(c)});
  $("rest").hidden=!hidden.size;if(hidden.size)$("rest").textContent=`Restaurar ${hidden.size} oculto(s)`;
- $("exp").hidden=!local.length;if(local.length)$("exp").textContent=`Exportar ${local.length} añadido(s)`;
+ {const un=local.filter(i=>!i.synced).length;$("exp").hidden=!un||syncOn();if(un)$("exp").textContent=`Exportar ${un} añadido(s)`}
+ syncStatus();
  total()}
 
 function total(){
@@ -509,11 +554,13 @@ $("sort").onchange=e=>{sort=e.target.value;grid()};
 $("clr").onclick=()=>{cart.clear();putSet(K.cart,cart);grid()};
 $("rest").onclick=()=>{hidden.clear();putSet(K.hid,hidden);tabs();filters();grid()};
 $("del").onclick=()=>{const s=sel();if(!s.length)return;
- if(!confirm(`¿Quitar ${s.length} artículo(s) de la cesta?`))return;
- const loc=s.filter(i=>i._local).map(i=>i.art);
- if(loc.length){local=local.filter(i=>!loc.includes(i.art));ls.s(K.loc,JSON.stringify(local))}
- s.forEach(i=>{if(!loc.includes(i.art))hidden.add(i.art);cart.delete(i.art)});
- putSet(K.hid,hidden);putSet(K.cart,cart);merge();tabs();filters();grid()};
+ const on=syncOn();
+ if(!confirm(on?`¿Quitar ${s.length} artículo(s) de la cesta en todos tus dispositivos?`:`¿Quitar ${s.length} artículo(s) de la cesta?`))return;
+ const arts=s.map(i=>i.art);
+ local=local.filter(i=>!arts.includes(i.art));ls.s(K.loc,JSON.stringify(local));
+ if(on){remote=remote.filter(i=>!arts.includes(i.art));enqueue({op:"del",arts})}
+ else s.forEach(i=>{if(!i._local)hidden.add(i.art)});
+ arts.forEach(a=>cart.delete(a));putSet(K.hid,hidden);putSet(K.cart,cart);merge();tabs();filters();grid()};
 $("exp").onclick=()=>{const t=JSON.stringify(local.map(({_local,history,status,added,...r})=>r),null,1);
  navigator.clipboard?.writeText(t).then(()=>alert("Copiado. Pégalo dentro de items.json, en GitHub."),
   ()=>prompt("Copia este texto en items.json:",t))};
@@ -690,30 +737,188 @@ $("f_cat").onchange=e=>{const[l,ph]=SZ[e.target.value]||SZ.ropa;
  $("f_desc").placeholder={ropa:"Para recordar cuál era",relojes:"Digital retro, correa de acero",
   perfumes:"Aromático, bergamota y pimienta"}[e.target.value]};
 $("add").onclick=()=>{clearForm();$("f_cat").value=cat;$("f_cat").onchange({target:$("f_cat")});$("dlg").showModal()};
-let pending=null;
-const clearForm=()=>{pending=null;document.querySelector("form.fm").classList.remove("shop");$("q_pv").hidden=true;["f_name","f_store","f_price","f_art","f_size","f_url","f_photo","f_desc","q_url"].forEach(i=>$(i).value="");
+let pending=null,editing=null;
+const clearForm=()=>{pending=null;editing=null;$("dlg_t").textContent="Añadir a la cesta";$("f_ok").textContent="Añadir";$("f_art").readOnly=false;document.querySelector("#dlg form").classList.remove("editing");document.querySelector("form.fm").classList.remove("shop");$("q_pv").hidden=true;["f_name","f_store","f_price","f_art","f_size","f_url","f_photo","f_desc","q_url"].forEach(i=>$(i).value="");
  $("q_res").className="detect";$("q_res").textContent="";$("q_raw").className="raw";$("q_raw").textContent="";
  $("q_raw_t").hidden=true;$("q_raw_t").textContent="Ver texto reconocido"};
 $("dlg").addEventListener("close",()=>{const d=$("dlg");
  if(d.returnValue!=="ok"){clearForm();return}
+ if(editing){const art=editing,patch=formPatch(art);clearForm();if(patch)applyPatch(art,patch,"Cambios guardados");return}
+ const it=formToNew();clearForm();if(it)commitAdd(it)});
+
+// ---- Alta, edición y deshacer ----
+const TYPE_OF={ropa:"top",relojes:"watch",perfumes:"perfume"};
+let edits={};try{edits=JSON.parse(ls.g("ropa_edits","{}"))}catch(e){}
+function formToNew(){
  const v=id=>$(id).value.trim(),p=parseFloat(v("f_price").replace(",","."));
- if(!v("f_name")||!(p>=0))return;
- const it={art:v("f_art")||"m"+Date.now().toString(36),noref:!v("f_art"),store:v("f_store")||"—",category:v("f_cat"),
-  type:v("f_cat")==="ropa"?"top":v("f_cat").slice(0,-1),label_price:p,price:p,label_size:v("f_size"),
-  url:v("f_url"),photo:v("f_photo"),name:v("f_name"),desc:v("f_desc"),wanted:[],
-  added:new Date().toISOString().slice(0,10)};
- if(pending&&it.category==="ropa"){it.type=pending.type;it.wanted=pending.wanted;it.in_my_size=pending.in_my_size;it.sizes=pending.sizes}
+ if(!v("f_name")||!(p>=0))return null;
+ const c=v("f_cat"),plan=c==="ropa"?sizePlan(v("f_name"),[]):null;
+ const it={art:v("f_art")||"m"+Date.now().toString(36),noref:!v("f_art"),store:v("f_store")||"—",category:c,
+  type:plan?plan.type:TYPE_OF[c],label_price:p,price:p,label_size:v("f_size"),url:v("f_url"),
+  photo:/^https?:\/\//.test(v("f_photo"))?v("f_photo"):"",name:v("f_name"),desc:v("f_desc"),
+  wanted:plan?plan.wanted:[],in_my_size:null,added:new Date().toISOString().slice(0,10)};
+ if(pending&&c==="ropa"&&pending.wanted){it.type=pending.type;it.wanted=pending.wanted;it.in_my_size=pending.in_my_size;it.sizes=pending.sizes}
  if(pending&&pending.op>p)it.original_price=pending.op;
- pending=null;
- local.push(it);ls.s(K.loc,JSON.stringify(local));
- clearForm();
- cat=it.category;ls.s("ropa_tab",cat);merge();tabs();filters();grid()});
+ return it}
+function formPatch(art){
+ const v=id=>$(id).value.trim(),p=parseFloat(v("f_price").replace(",","."));
+ if(!v("f_name")||!(p>=0))return null;
+ const old=items.find(i=>i.art===art)||{},c=v("f_cat");
+ const patch={name:v("f_name"),store:v("f_store")||"—",category:c,label_size:v("f_size"),url:v("f_url"),
+  photo:/^https?:\/\//.test(v("f_photo"))?v("f_photo"):"",desc:v("f_desc")};
+ if(Math.abs(p-(+old.price||0))>.004){patch.price=p;patch.label_price=p;patch.manual_price=p}
+ if((old.category||"ropa")!==c){const pl=c==="ropa"?sizePlan(patch.name,[]):null;
+  patch.type=pl?pl.type:TYPE_OF[c];patch.wanted=pl?pl.wanted:[];patch.in_my_size=null}
+ const na=v("f_art");if(old._local&&na&&na!==art){patch.art=na;patch.noref=false}
+ return patch}
+function renameKey(a,b){[cart,hidden].forEach(S=>{if(S.has(a)){S.delete(a);S.add(b)}});
+ if(photos[a]){photos[b]=photos[a];delete photos[a];ls.s(K.pho,JSON.stringify(photos))}
+ putSet(K.cart,cart);putSet(K.hid,hidden)}
+function applyPatch(art,patch,msg){
+ const li=local.findIndex(i=>i.art===art);
+ if(li>=0){local[li]={...local[li],...patch};if(patch.art&&patch.art!==art)renameKey(art,patch.art);ls.s(K.loc,JSON.stringify(local))}
+ else{const {art:_,...rest}=patch;edits[art]={...(edits[art]||{}),...rest};ls.s("ropa_edits",JSON.stringify(edits))}
+ enqueue({op:"edit",art,patch});
+ merge();tabs();filters();grid();
+ if(msg)toast(`<div class="tx"><b>${esc(msg)}</b></div>`)}
+function commitAdd(it,info){
+ // mismo producto: misma referencia, o la misma sin color (Zara no pone el color en la URL) en la misma tienda
+ const sameRef=(a,b)=>{if(a===b)return true;const x=String(a).split("/"),y=String(b).split("/");
+  return x.length>=2&&y.length>=2&&x[0]===y[0]&&x[1]===y[1]&&(x.length===2||y.length===2)};
+ const dup=it.noref?null:items.find(i=>!i.noref&&(i.store||"")===(it.store||"")&&sameRef(i.art,it.art));
+ if(dup){const {art,added,...rest}=it;
+  if(Math.abs((+dup.price||0)-it.price)>.004)rest.manual_price=it.price;else{delete rest.price;delete rest.label_price}
+  applyPatch(dup.art,rest);cat=dup.category||"ropa";ls.s("ropa_tab",cat);tabs();filters();grid();
+  showAdded(dup.art,"Ya estaba en tu cesta: datos actualizados");return}
+ local.push(it);ls.s(K.loc,JSON.stringify(local));enqueue({op:"add",item:it});
+ cat=it.category;ls.s("ropa_tab",cat);merge();tabs();filters();grid();
+ showAdded(it.art,"Añadido a tu cesta"+(info||""))}
+function showAdded(art,msg){const it=items.find(i=>i.art===art);if(!it)return;const src=pic(it);
+ toast(`${src?`<img src="${esc(src)}" alt="" referrerpolicy="no-referrer">`:""}<div class="tx"><b>${esc(msg)}</b><span>${esc(it.name)} · ${fmt(it.price)}</span></div>`,
+  [["Editar",()=>openEdit(items.find(i=>i.art===art))],["Deshacer",()=>undoAdd(art)]],8000);
+ setTimeout(()=>{const card=[...document.querySelectorAll(".card")].find(c=>c.dataset.art===art);if(card)card.scrollIntoView({behavior:"smooth",block:"center"})},120)}
+function undoAdd(art){const li=local.findIndex(i=>i.art===art);
+ if(li>=0){local.splice(li,1);ls.s(K.loc,JSON.stringify(local));
+  const q=getQ(),qi=q.findIndex(o=>o.op==="add"&&o.item.art===art);
+  if(qi>=0&&!flushing){q.splice(qi,1);setQ(q)}else enqueue({op:"del",arts:[art]})}
+ merge();tabs();filters();grid();toast(`<div class="tx"><b>Deshecho</b></div>`,[],2500)}
+function openEdit(it){if(!it)return;
+ clearForm();editing=it.art;
+ document.querySelector("#dlg form").classList.add("editing");$("dlg_t").textContent="Editar";$("f_ok").textContent="Guardar";
+ $("f_cat").value=it.category||"ropa";$("f_cat").onchange({target:$("f_cat")});
+ $("f_name").value=it.name||"";$("f_store").value=it.store||"";$("f_price").value=Number(it.price||0).toFixed(2).replace(".",",");
+ $("f_art").value=it.noref?"":(it.art||"");$("f_art").readOnly=!it._local;
+ $("f_size").value=it.label_size||"";$("f_url").value=it.url||"";
+ const ph=it.photo||it.image||"";$("f_photo").value=/^https?:\/\//.test(ph)?ph:"";$("f_desc").value=it.desc||"";
+ $("dlg").showModal()}
+let toastT;
+function toast(html,actions=[],ms=5000){const t=$("toast");
+ t.innerHTML=html+actions.map((a,i)=>`<button type="button" data-i="${i}">${a[0]}</button>`).join("");
+ t.querySelectorAll("button").forEach(b=>b.onclick=()=>{t.classList.remove("show");actions[+b.dataset.i][1]()});
+ t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),ms)}
+
+// ---- Sincronización con GitHub: cola de cambios que se sube en un solo commit ----
+const cfg=()=>{try{return JSON.parse(ls.g("ropa_sync","{}"))}catch(e){return{}}};
+const syncOn=()=>{const c=cfg();return !!(c.repo&&c.token)};
+const getQ=()=>{try{return JSON.parse(ls.g("ropa_queue","[]"))}catch(e){return[]}};
+const setQ=q=>ls.s("ropa_queue",JSON.stringify(q));
+let flushing=false,syncErr="";
+function repoGuess(){const m=location.hostname.match(/^([\w-]+)\.github\.io$/i),r=location.pathname.split("/").filter(Boolean)[0];
+ return m&&r&&!/\.html$/.test(r)?m[1]+"/"+r:""}
+const API=()=>ls.g("ropa_api","https://api.github.com");
+function b64e(str){const b=new TextEncoder().encode(str);let s="";for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
+function b64d(x){const s=atob(String(x).replace(/\s/g,"")),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return new TextDecoder().decode(u)}
+async function gh(path,opt={}){const c=cfg();
+ const r=await fetch(API()+"/repos/"+c.repo+"/contents/"+path,{cache:"no-store",...opt,
+  headers:{Authorization:"Bearer "+c.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",
+   ...(opt.body?{"Content-Type":"application/json"}:{})}});
+ if(!r.ok){const e=new Error("GitHub "+r.status);e.status=r.status;throw e}
+ return r.json()}
+function toRepo(it){const o={art:it.art,store:it.store,category:it.category||"ropa",type:it.type||TYPE_OF[it.category||"ropa"],
+  label_price:+it.label_price||+it.price||0,label_size:it.label_size||"",url:it.url||"",name:it.name||"",desc:it.desc||"",
+  photo:/^https?:\/\//.test(it.photo||"")?it.photo:"",wanted:it.wanted||[],added:it.added||""};
+ if(it.noref)o.noref=true;
+ if(it.original_price>it.price)o.label_original=it.original_price;
+ if(it.in_my_size!==undefined&&it.in_my_size!==null)o.in_my_size=it.in_my_size;
+ if(it.sizes&&it.sizes.length)o.sizes=it.sizes;
+ if(it.manual_price!=null)o.manual_price=it.manual_price;
+ return o}
+function applyOp(arr,o){
+ if(o.op==="add"){const i=arr.findIndex(x=>x.art===o.item.art);if(i<0)arr.push(toRepo(o.item));else arr[i]={...arr[i],...toRepo(o.item)}}
+ else if(o.op==="edit"){const i=arr.findIndex(x=>x.art===o.art);if(i<0)return;
+  const OKK=["art","name","store","category","type","label_price","label_size","url","desc","photo","wanted","noref","in_my_size","sizes","manual_price"];
+  const p={};OKK.forEach(k=>{if(o.patch[k]!==undefined)p[k]=o.patch[k]});
+  if(p.photo!==undefined&&!/^https?:\/\//.test(p.photo))p.photo="";
+  const lp=p.label_price!=null?p.label_price:arr[i].label_price;
+  arr[i]={...arr[i],...p};
+  if(o.patch.original_price!==undefined){if(o.patch.original_price>lp)arr[i].label_original=o.patch.original_price;else delete arr[i].label_original}
+  if(p.in_my_size===null)delete arr[i].in_my_size}
+ else if(o.op==="del")arr.splice(0,arr.length,...arr.filter(x=>!o.arts.includes(x.art)))}
+function enqueue(o){if(!syncOn())return;const q=getQ();q.push(o);setQ(q);syncStatus();flush()}
+async function flush(){
+ if(!syncOn()||flushing)return;const q=getQ();if(!q.length){syncStatus();return}
+ flushing=true;syncErr="";syncStatus();
+ try{
+  let done=false;
+  for(let n=0;n<3&&!done;n++){
+   const f=await gh("items.json"),arr=JSON.parse(b64d(f.content));
+   q.forEach(o=>applyOp(arr,o));
+   const adds=q.filter(o=>o.op==="add").length,eds=q.filter(o=>o.op==="edit").length,dels=q.filter(o=>o.op==="del").reduce((a,o)=>a+o.arts.length,0);
+   const msg="Cesta: "+[adds&&adds+" añadido(s)",eds&&eds+" editado(s)",dels&&dels+" quitado(s)"].filter(Boolean).join(", ");
+   try{await gh("items.json",{method:"PUT",body:JSON.stringify({message:msg,content:b64e(JSON.stringify(arr,null,1)+"\n"),sha:f.sha})});done=true}
+   catch(e){if(e.status!==409&&e.status!==422)throw e}}
+  if(!done)throw new Error("conflicto");
+  const added=q.filter(o=>o.op==="add").map(o=>o.item.art);
+  local.forEach(i=>{if(added.includes(i.art))i.synced=true});ls.s(K.loc,JSON.stringify(local));
+  setQ(getQ().slice(q.length));
+ }catch(e){
+  syncErr=e.status===401||e.status===403?"clave sin permiso":e.status===404?"repositorio no encontrado":e.status?"error "+e.status:"sin conexión"}
+ finally{flushing=false;merge();grid();if(!syncErr&&getQ().length)setTimeout(flush,400)}}
+function syncStatus(){const b=$("syncst");if(!b)return;
+ const n=getQ().length;b.className="";
+ if(!syncOn()){b.textContent="Sincronizar";return}
+ if(syncErr){b.className="bad";b.textContent="⚠ No sincronizado: "+syncErr+(n?` (${n} pendiente${n>1?"s":""})`:"");return}
+ if(flushing){b.textContent="Guardando…";return}
+ if(n){b.className="warn";b.textContent=`${n} cambio${n>1?"s":""} pendiente${n>1?"s":""}`;return}
+ b.className="ok";b.textContent="✓ Sincronizado"}
+function openCfg(){const c=cfg();$("c_repo").value=c.repo||repoGuess();$("c_tok").value="";
+ $("c_tok").placeholder=c.token?"•••• clave guardada (déjalo vacío para mantenerla)":"github_pat_…";
+ $("c_off").hidden=!syncOn();$("c_res").className="detect";$("c_res").textContent="";$("cfg").showModal()}
+$("settings").onclick=openCfg;$("syncst").onclick=openCfg;
+$("c_ok").onclick=async()=>{
+ const repo=$("c_repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$|\/$/g,""),
+  tok=$("c_tok").value.trim()||cfg().token,box=$("c_res");
+ if(!/^[\w.-]+\/[\w.-]+$/.test(repo)||!tok){box.className="detect bad";box.textContent="Falta el repositorio (usuario/nombre) o la clave.";return}
+ const prev=ls.g("ropa_sync","");ls.s("ropa_sync",JSON.stringify({repo,token:tok}));
+ box.className="detect ok";box.textContent="Comprobando…";
+ try{await gh("items.json")}catch(e){
+  if(prev)ls.s("ropa_sync",prev);else{try{localStorage.removeItem("ropa_sync")}catch(_){}}
+  box.className="detect bad";box.textContent=e.status===401?"La clave no es válida o ha caducado.":
+   e.status===404?"No encuentro ese repositorio o su items.json (o la clave no tiene acceso a él).":
+   e.status===403?"La clave no tiene permiso sobre ese repositorio.":"No he podido conectar con GitHub.";return}
+ const q=getQ(),queued=new Set(q.filter(o=>o.op==="add").map(o=>o.item.art));
+ local.filter(i=>!i.synced&&!queued.has(i.art)).forEach(i=>q.push({op:"add",item:i}));
+ const qe=new Set(q.filter(o=>o.op==="edit").map(o=>o.art));
+ Object.entries(edits).forEach(([a,pt])=>{if(!qe.has(a))q.push({op:"edit",art:a,patch:pt})});setQ(q);
+ box.textContent="Conectado. Subiendo cambios…";await flush();
+ if(syncErr){box.className="detect bad";box.textContent="Conectado, pero no se pudo guardar: "+syncErr+". Revisa que la clave tenga Contents: Read and write."}
+ else{box.className="detect ok";box.textContent="✓ Sincronización activada. Lo que añadas aquí aparecerá en tus otros dispositivos.";$("c_off").hidden=false}
+ grid()};
+$("c_off").onclick=()=>{try{localStorage.removeItem("ropa_sync")}catch(e){}$("c_off").hidden=true;
+ $("c_res").className="detect ok";$("c_res").textContent="Desactivada en este dispositivo.";grid()};
+addEventListener("online",()=>flush());
 
 fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
  remote=d.items.map(i=>({...i,original_price:i.original_price||0}));
  $("upd").textContent="Actualizado "+new Date(d.updated).toLocaleString("es-ES",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
 }).catch(()=>{$("upd").textContent="Sin datos del repositorio"})
- .finally(()=>{merge();tabs();filters();grid();fromShop()});
+ .finally(()=>{
+  const rA=new Set(remote.map(i=>i.art));
+  local=local.filter(i=>!(i.synced&&rA.has(i.art)));ls.s(K.loc,JSON.stringify(local));
+  for(const a in edits){const r=remote.find(i=>i.art===a);
+   if(!r||Object.entries(edits[a]).every(([k,v])=>k==="manual_price"||JSON.stringify(r[k])===JSON.stringify(v)))delete edits[a]}
+  ls.s("ropa_edits",JSON.stringify(edits));
+  merge();tabs();filters();grid();fromShop();flush()});
 
 // ---- Datos que envía el botón "+ A mi cesta" desde la ficha de la tienda ----
 const MY={letras:["M","L"],numero:["40","42"],calzado:["40.5","41","41.5","42"]};
@@ -763,6 +968,9 @@ function fromShop(){
  $("q_pv_img").referrerPolicy="no-referrer";
  $("q_pv_st").textContent=r.store||"";$("q_pv_n").textContent=d.n||"";
  $("q_pv_p").innerHTML=d.p?fmt(+d.p)+(d.op>d.p?"<s>"+fmt(+d.op)+"</s>":""):"";
+ if(d.n&&d.p&&!miss.includes("tienda")){
+  const it=formToNew();clearForm();
+  if(it){commitAdd(it,(k==="ropa"&&!sz.length)?" (sin tallas: ábrelas en la tienda y repite si las quieres)":"");return}}
  const box=$("q_res");box.className="detect "+(d.p&&d.n?"ok":"bad");
  box.textContent="Leído de "+(r.store||"la tienda")+": "+got.join(", ")+"."+
   (miss.length?" No encontrado: "+miss.join(", ")+".":"")+

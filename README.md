@@ -16,12 +16,27 @@ bloquean los servidores. Por eso existe el botón **＋ A mi cesta**
 
 1. Abre la ficha del producto en el navegador.
 2. Pulsa el marcador **＋ A mi cesta**.
-3. Se abre la cesta con nombre, precio (y el anterior si está rebajado),
-   foto, tienda, referencia, tallas disponibles, ml o mm ya rellenos.
+3. Se añade solo a la cesta con nombre, precio (y el anterior si está rebajado),
+   foto, tienda, referencia, tallas disponibles, ml o mm. El aviso ofrece Editar y Deshacer.
 
 Solo lee lo que la página ya muestra; no hace peticiones extra a la tienda
 ni envía nada a terceros. Los datos viajan en el fragmento `#` del enlace,
 que no llega a ningún servidor.
+
+## Sincronizar entre dispositivos (opcional, recomendado)
+
+Sin esto, lo que añades se queda en el navegador donde lo añadiste. Con esto, cada
+alta, edición o borrado se guarda en `items.json` del repositorio: aparece en todos
+tus dispositivos y entra en el seguimiento de precios.
+
+1. En la app, pulsa el icono de la nube (arriba) o "Sincronizar".
+2. Crea una clave *fine-grained* en GitHub con acceso **solo a este repositorio** y
+   el permiso **Contents: Read and write** (la app explica los pasos).
+3. Pégala y pulsa "Guardar y probar". Repite en cada dispositivo.
+
+La clave se guarda solo en ese navegador, nunca en el repositorio. Si no hay
+conexión, los cambios esperan en cola y se suben solos al volver. Si dos
+dispositivos guardan a la vez, se reintenta sin perder nada.
 
 ## Añadir artículos desde el móvil
 

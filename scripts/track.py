@@ -139,7 +139,19 @@ def build_record(item, prev, today):
         "name": item.get("name") or rec.get("name") or "Ref. " + item["art"],
         "url": item.get("url") or rec.get("url") or "",
         "image": item.get("photo") or rec.get("image") or "",
+        "noref": bool(item.get("noref")),
     })
+    # datos que la app ya leyó de la tienda: se conservan mientras el scraper no consiga otros
+    if item.get("sizes"):
+        rec["sizes"] = item["sizes"]
+    if "in_my_size" in item and rec.get("in_my_size") is None:
+        rec["in_my_size"] = item["in_my_size"]
+    # precio corregido a mano desde la app: se apunta una sola vez (sin alternar con el de la web)
+    mp = item.get("manual_price")
+    if mp is not None:
+        last_manual = next((h["price"] for h in reversed(rec["history"]) if h.get("source") == "manual"), None)
+        if last_manual != mp and rec["history"][-1]["price"] != mp:
+            rec["history"].append({"date": today.isoformat(), "price": mp, "source": "manual"})
     return rec
 
 
@@ -174,6 +186,8 @@ def check_item(item, prev, today):
         rec["status"] = "error: %s" % e
     if not rec["wanted"]:                      # relojes y perfumes no tienen talla
         rec["in_my_size"] = None
+    elif "in_my_size" not in rec:
+        rec["in_my_size"] = item.get("in_my_size")
     rec["price"] = rec["history"][-1]["price"]
     rec["last_checked"] = datetime.now(timezone.utc).isoformat(timespec="minutes")
     return rec, alert

@@ -51,6 +51,21 @@ class T(unittest.TestCase):
              mock.patch.object(track, "download_image", return_value="img/x.jpg") as d:
             rec, _ = track.check_item(ITEM, None, date(2026, 11, 27))
         self.assertEqual(rec["image"], "img/x.jpg"); d.assert_called_once()
+    def test_app_fields_pass_through(self):
+        it = {"art": "m1x", "noref": True, "type": "top", "label_price": 25.99, "label_original": 39.99,
+              "url": "", "wanted": ["M", "L"], "in_my_size": ["M"], "sizes": [["M", True], ["L", False]], "category": "ropa"}
+        rec, _ = track.check_item(it, None, date(2026, 11, 27))
+        self.assertTrue(rec["noref"]); self.assertEqual(rec["in_my_size"], ["M"])
+        self.assertEqual(rec["original_price"], 39.99); self.assertEqual(rec["sizes"][1], ["L", False])
+    def test_manual_price_once_no_flipflop(self):
+        it = {**ITEM, "url": "", "manual_price": 19.99}
+        rec, _ = track.check_item(it, None, date(2026, 11, 27))
+        self.assertEqual(rec["price"], 19.99)
+        # siguiente ejecución: la web dice otra cosa; el precio manual no se vuelve a apuntar
+        with mock.patch.object(track, "fetch", return_value=resp("15.99")):
+            rec2, _ = track.check_item({**ITEM, "manual_price": 19.99}, json.loads(json.dumps(rec)), date(2026, 11, 28))
+        rec3, _ = track.check_item({**it}, json.loads(json.dumps(rec2)), date(2026, 11, 29))
+        self.assertEqual([h["source"] for h in rec3["history"]].count("manual"), 1)
     def test_email(self):
         a = [{"name": "n", "old": 15.99, "new": 12.99, "url": "u", "art": "a", "in_my_size": ["M"]}]
         env = {"SMTP_USER": "u@x", "SMTP_PASS": "p", "EMAIL_TO": "t@x"}

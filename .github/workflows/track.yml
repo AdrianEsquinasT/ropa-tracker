@@ -2,8 +2,14 @@ name: track
 on:
   schedule: [{cron: "0 */6 * * *"}]
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [items.json]        # cuando la app añade, edita o quita algo, se regenera data.json al momento
 permissions:
   contents: write
+concurrency:
+  group: track
+  cancel-in-progress: false
 jobs:
   track:
     runs-on: ubuntu-latest
@@ -16,8 +22,13 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-      - run: |
+      - name: Guardar precios
+        run: |
           git config user.name "tracker-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add docs/data.json docs/img
-          git diff --cached --quiet || (git commit -m "actualiza precios" && git push)
+          git add docs/data.json
+          if [ -d docs/img ]; then git add docs/img; fi
+          if git diff --cached --quiet; then echo "sin cambios"; exit 0; fi
+          git commit -m "actualiza precios"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && exit 0; sleep 5; done
+          exit 1
