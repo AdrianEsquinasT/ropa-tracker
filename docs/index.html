@@ -549,17 +549,26 @@ function titleCase(slug){
  return slug.replace(/-/g," ").trim().replace(/\s+/g," ")
   .replace(/^./,c=>c.toUpperCase())}
 // patrones por tienda: de URL -> {art, name}; y de referencia -> URL
-const URL_PATTERNS=[
- {store:"Zara",re:/zara\.com\/[a-z]{2}\/[a-z]{2}\/([a-z0-9-]*?)-?p0(\d{7})(?:-\d+)?\.html/i,
-  art:m=>m[2].slice(0,4)+"/"+m[2].slice(4,7),name:m=>titleCase(m[1])},
- {store:"Pull&Bear",re:/pullandbear\.com\/(?:[a-z]{2}\/)?(?:share\/)?-l0(\d{7})/i,
-  art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7)},
- {store:"Lefties",re:/lefties\.com\/(?:[a-z]{2}\/)?(?:share\/)?-l0(\d{7})/i,
-  art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7)},
- {store:"Bershka",re:/bershka\.com\/[a-z]{2}\/([a-z0-9-]*?)-c0p0?(\d+)\.html/i,
-  name:m=>titleCase(m[1])},
+// Referencias que las tiendas meten en la URL (en cualquier parte de la ruta)
+const URL_IDS=[
+ {store:"Zara",re:/-p0(\d{7})(?:-\d+)?\.html/i,art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7)},
+ {store:"Pull&Bear",re:/-l0(\d{7})(?![\dA-Z])/,art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7),cs:true},
+ {store:"Lefties",re:/-l0(\d{7})(?![\dA-Z])/,art:m=>m[1].slice(0,4)+"/"+m[1].slice(4,7),cs:true},
  {store:"Álvaro Moreno",re:/alvaromoreno\.com\/(\d+)_([a-z]+)/i,art:m=>m[1]},
 ];
+// Nombre del producto a partir del último tramo de la URL ("sudadera-polar-textura-capucha-p04387427.html")
+function slugName(u){
+ let seg="";try{seg=decodeURIComponent(u.pathname)}catch(e){seg=u.pathname}
+ seg=(seg.split("/").filter(Boolean).pop()||"").replace(/ /g," ");
+ seg=seg.replace(/\.(html?|php|aspx?)$/i,"").replace(/^product\./i,"")
+  .replace(/-?(c\d+p\d+|c0p\d+|p0\d{7}(?:-\d+)?|l0\d{7}[A-Z]*|\d{5,})$/i,"");
+ seg=seg.replace(/[_+]/g,"-").replace(/[|©®™()\[\]]/g," ").replace(/\s*-\s*/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"");
+ if(!/[a-záéíóúñ]{3}/.test(seg)||!/-/.test(seg))return"";
+ return titleCase(seg)}
+function guessCat(t){t=t.toLowerCase();
+ if(/eau de|parfum|perfume|colonia|\bedt\b|\bedp\b|fragancia|\b\d{2,3}\s?ml\b/.test(t))return"perfumes";
+ if(/\breloj|watch|cron[oó]grafo|smartwatch/.test(t))return"relojes";
+ return""}
 // para generar la URL cuando solo se da tienda + referencia (sin pegar enlace)
 const REF_TO_URL={
  "Pull&Bear":g=>"https://www.pullandbear.com/es/-l0"+g[0]+g[1]+(g[2]?"?cS="+g[2]:""),
@@ -577,15 +586,12 @@ function detectFromText(v){
  v=v.trim();if(!v)return null;
  if(!looksLikeUrl(v)){const g=splitRef(v);if(!g)return null;
   return{store:"",art:g[2]?g.join("/"):g.slice(0,2).join("/"),name:"",url:"",needStore:true}}
- try{
-  const u=new URL(/^https?:\/\//.test(v)?v:"https://"+v);
-  const CS_STORES=new Set(["Pull&Bear","Lefties"]);
-  for(const p of URL_PATTERNS){const m=v.match(p.re);if(m){
-   let art=p.art?p.art(m):"";
-   if(CS_STORES.has(p.store)&&art){const cs=v.match(/[?&]cS=(\d+)/i);if(cs)art+="/"+cs[1]}
-   return{store:p.store,art,name:p.name?p.name(m):"",url:v}}}
-  return{store:storeFromHost(u.hostname),art:"",name:"",url:v}
- }catch(e){return null}}
+ let u;try{u=new URL(/^https?:\/\//.test(v)?v:"https://"+v)}catch(e){return null}
+ const store=storeFromHost(u.hostname);let art="";
+ for(const p of URL_IDS){if(p.store!==store&&!(p.store==="Álvaro Moreno"&&/alvaromoreno/.test(u.hostname)))continue;
+  const m=v.match(p.re);if(m){art=p.art(m);if(p.cs){const cs=v.match(/[?&]cS=(\d+)/i);if(cs)art+="/"+cs[1]}}break}
+ const name=slugName(u);
+ return{store,art,name,url:v,cat:guessCat(name+" "+u.pathname)}}
 $("q_go").onclick=()=>{
  const r=detectFromText($("q_url").value),box=$("q_res");
  if(!r){box.className="detect bad";box.textContent="No he reconocido nada en ese texto.";return}
@@ -599,12 +605,17 @@ $("q_go").onclick=()=>{
    box.className="detect ok";box.textContent="Referencia guardada y enlace de "+store+" generado. Revísalo.";}
   else{box.className="detect ok";box.textContent="Referencia guardada. No sé generar el enlace de "+(store||"esa tienda")+": pégalo si lo tienes.";}
   return}
- if(r.store&&!$("f_store").value)$("f_store").value=r.store;
+ if(r.cat&&r.cat!==$("f_cat").value){$("f_cat").value=r.cat;$("f_cat").onchange({target:$("f_cat")})}
+ if(r.store)$("f_store").value=r.store;
  if(r.art)$("f_art").value=r.art;
- if(r.name&&!$("f_name").value)$("f_name").value=r.name;
+ if(r.name)$("f_name").value=r.name;
  if(r.url)$("f_url").value=r.url;
+ const ml=(r.name||"").match(/\b(\d{2,3})\s?ml\b/i);if(ml&&$("f_cat").value==="perfumes"&&!$("f_size").value)$("f_size").value=ml[1];
+ const got=[r.store&&"tienda",r.name&&"nombre",r.art&&"referencia","enlace",r.cat&&"categoría",ml&&"ml"].filter(Boolean);
  box.className="detect ok";
- box.textContent="Detectado: "+(r.store||"tienda desconocida")+(r.art?" · "+r.art:"")+". Revisa los datos antes de añadir."};
+ box.innerHTML="Rellenado: "+got.join(", ")+".<br><b>Precio, foto y tallas</b> no se pueden leer pegando el enlace: "+
+  "el navegador impide que una web lea otra. Para eso, abre la ficha en la tienda y pulsa <a href=\"instalar.html\">＋ A mi cesta</a>.";
+ if(!$("f_price").value)$("f_price").focus()};
 
 // ---- Escaneo de la etiqueta por OCR (en el propio teléfono, nada sale de él) ----
 let ocrReady=null;
