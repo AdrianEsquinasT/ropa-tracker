@@ -7,6 +7,22 @@ guardarlo en PDF.
 
 Web: https://adrianesquinast.github.io/ropa-tracker/
 
+## Añadir desde la tienda, con todo relleno
+
+Pegar solo la URL en la app no puede traer precio ni tallas: el navegador
+impide que una web lea las páginas de otra (CORS), y las tiendas de Inditex
+bloquean los servidores. Por eso existe el botón **＋ A mi cesta**
+(`docs/bookmarklet.js`, instalación en `instalar.html`):
+
+1. Abre la ficha del producto en el navegador.
+2. Pulsa el marcador **＋ A mi cesta**.
+3. Se abre la cesta con nombre, precio (y el anterior si está rebajado),
+   foto, tienda, referencia, tallas disponibles, ml o mm ya rellenos.
+
+Solo lee lo que la página ya muestra; no hace peticiones extra a la tienda
+ni envía nada a terceros. Los datos viajan en el fragmento `#` del enlace,
+que no llega a ningún servidor.
+
 ## Añadir artículos desde el móvil
 
 1. Pulsa **+ Añadir**, elige categoría y rellena nombre, tienda y precio.

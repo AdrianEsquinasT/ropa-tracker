@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Botón de tienda · Cesta de deseos</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+@font-face{font-family:"Instrument Serif";src:url(fonts/instrument-serif-latin-400-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url(fonts/instrument-serif-latin-400-italic.woff2) format("woff2");font-style:italic;font-display:swap}
+:root{--bg:#f6f4f0;--surface:#fff;--surface-2:#eeebe5;--ink:#151417;--mut:#6e6a73;--line:#e5e1da;--accent:#d4503e;--ok:#1f7a45;
+ --serif:"Instrument Serif",ui-serif,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#111013;--surface:#1b1a1e;--surface-2:#26242a;--ink:#f1eff3;--mut:#9d99a3;--line:#2e2c33;--accent:#f07261;--ok:#4fd08a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
+ padding:calc(20px + env(safe-area-inset-top)) max(18px,env(safe-area-inset-left)) calc(40px + env(safe-area-inset-bottom))}
+main{max-width:620px;margin:0 auto}
+a.back{color:var(--mut);font-size:14px;text-decoration:none}
+h1{font:400 clamp(34px,9vw,46px)/1.02 var(--serif);margin:18px 0 10px;letter-spacing:-.01em}
+h1 em{color:var(--accent)}
+.lead{color:var(--mut);margin:0 0 22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 10px 28px -16px rgba(0,0,0,.25)}
+h2{font:400 26px/1.1 var(--serif);margin:0 0 10px}
+ol{margin:0;padding-left:22px}li{margin:8px 0}
+.bm{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:650;
+ padding:12px 18px;border-radius:99px;cursor:grab}
+button{font:650 15px var(--sans);border:0;border-radius:14px;height:48px;padding:0 18px;cursor:pointer;background:var(--ink);color:var(--bg);width:100%}
+#ok{display:none;color:var(--ok);font-weight:650;margin-top:8px}
+.note{font-size:13.5px;color:var(--mut);background:var(--surface-2);border-radius:14px;padding:12px 14px}
+kbd{font:600 13px var(--sans);background:var(--surface-2);padding:2px 7px;border-radius:6px;border:1px solid var(--line)}
+</style></head><body><main>
+<a class="back" href="./">← Volver a la cesta</a>
+<h1>Añade desde la <em>tienda</em></h1>
+<p class="lead">Abre la prenda, el reloj o el perfume en la web de la tienda y pulsa el botón <b>＋ A mi cesta</b>: se abre tu cesta con nombre, precio, foto, tienda, tallas, ml o mm ya rellenos. Tú solo revisas y pulsas Añadir.</p>
+
+<div class="card"><h2>En el iPhone (Safari)</h2>
+ <ol>
+  <li><button id="copy" type="button">Copiar el código del botón</button><div id="ok">Copiado ✓</div></li>
+  <li>Pulsa <kbd>Compartir</kbd> → <b>Añadir a favoritos</b> (esta misma página) y llámalo <b>＋ A mi cesta</b>.</li>
+  <li>Abre <kbd>Favoritos</kbd>, pulsa <b>Editar</b>, toca <b>＋ A mi cesta</b>, borra la dirección y <b>pega</b> el código. Guarda.</li>
+  <li>Para usarlo: abre la prenda <b>en Safari</b> (no en la app de la tienda), toca la barra de direcciones y elige <b>＋ A mi cesta</b> en Favoritos.</li>
+ </ol></div>
+
+<div class="card"><h2>En el ordenador</h2>
+ <p style="margin:0 0 12px">Arrastra este botón a tu barra de marcadores:</p>
+ <a class="bm" id="bm" href="#">＋ A mi cesta</a>
+ <p style="margin:12px 0 0;color:var(--mut);font-size:14px">Después, en la ficha de cualquier producto, pulsa el marcador.</p></div>
+
+<p class="note"><b>Qué hace y qué no:</b> solo lee lo que ya ves en pantalla en esa página. No hace peticiones extra a la tienda ni envía nada a terceros; los datos viajan dentro del enlace a tu cesta y se quedan en tu dispositivo.
+ Funciona con la mayoría de tiendas. Si una tienda oculta las tallas hasta pulsar "Añadir", abre primero su selector de tallas y luego pulsa el botón.</p>
+</main>
+<script>
+const APP=location.origin+location.pathname.replace(/instalar\.html$/,"");
+fetch("bookmarklet.js",{cache:"no-store"}).then(r=>r.text()).then(src=>{
+ src=src.replace(/\/\*[\s\S]*?\*\//g,"").replace("__APP__",APP);
+ const code="javascript:"+encodeURIComponent(src.trim());
+ document.getElementById("bm").href=code;
+ document.getElementById("copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText(code)}catch(e){prompt("Copia este código:",code)}
+  document.getElementById("ok").style.display="block"};
+});
+</script></body></html>

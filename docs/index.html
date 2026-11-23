@@ -224,6 +224,14 @@ textarea{resize:vertical;min-height:70px}
 .raw{font:11px/1.4 ui-monospace,SFMono-Regular,monospace;color:var(--mut);white-space:pre-wrap;max-height:110px;overflow:auto;background:var(--surface);
  border-radius:10px;padding:8px;display:none}
 .raw.show{display:block}
+.pv{display:flex;gap:12px;align-items:center}
+.pv img{width:64px;height:84px;object-fit:cover;border-radius:12px;background:var(--surface);flex:none}
+.pv>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pv b{font:600 15px/1.3 var(--sans)}
+.pvp{font:700 15px var(--sans);font-variant-numeric:tabular-nums}.pvp s{font-weight:400;color:var(--mut);margin-left:6px}
+form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{display:none}
+.shoplink{display:block;font:600 12.5px/1.4 var(--sans);color:var(--ink);text-decoration:none;background:var(--surface);border-radius:12px;padding:10px 12px;border:1px solid var(--line)}
+.shoplink b{color:var(--accent)}
 .toggle{font:600 12px var(--sans);color:var(--ink);text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;text-align:left;justify-self:start}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -301,11 +309,14 @@ textarea{resize:vertical;min-height:70px}
  <h3 id="dlg_t">Añadir a la cesta</h3>
 
  <div class="quick">
+  <div class="pv" id="q_pv" hidden><img id="q_pv_img" alt=""><div><span class="store" id="q_pv_st"></span>
+   <b id="q_pv_n"></b><span class="pvp" id="q_pv_p"></span></div></div>
   <div class="row2"><input id="q_url" placeholder="URL o referencia" aria-label="URL de la prenda o referencia, por ejemplo 7210/538/104">
    <button type="button" class="go" id="q_go">Rellenar</button></div>
   <div class="detect" id="q_res"></div>
   <div class="or">o bien</div>
   <button type="button" class="scan" id="q_scan">📷 Escanear foto de la etiqueta</button>
+  <a class="shoplink" href="instalar.html">⚡ ¿Que se rellene <b>todo</b> solo (precio, tallas, foto)? Instala el botón para la tienda</a>
   <button type="button" class="toggle" id="q_raw_t" hidden>Ver texto reconocido</button>
   <div class="raw" id="q_raw"></div>
  </div>
@@ -444,7 +455,7 @@ function grid(){
    :`<div class="ph">${im}</div>`;
   let sz="";
   if(it.wanted&&it.wanted.length){
-   if(it.in_my_size)sz=it.in_my_size.length?`<span class="chip ok">✓ Hay ${esc(it.in_my_size.join(" y "))}</span>`
+   if(it.in_my_size)sz=it.in_my_size.length?`<span class="chip ok">✓ Hay ${esc(it.in_my_size.length>1?it.in_my_size.slice(0,-1).join(", ")+" y "+it.in_my_size.slice(-1):it.in_my_size[0])}</span>`
     :`<span class="chip bad">${esc(it.wanted.join("/"))} agotada</span>`;
    else sz=`<span class="chip" title="Aún no se ha podido comprobar el stock">Busco ${esc(it.wanted.join("/"))}</span>`;
   }else if(it.label_size)sz=`<span class="chip">${esc(it.label_size)}${ct==="perfumes"?" ml":ct==="relojes"?" mm":""}</span>`;
@@ -668,7 +679,8 @@ $("f_cat").onchange=e=>{const[l,ph]=SZ[e.target.value]||SZ.ropa;
  $("f_desc").placeholder={ropa:"Para recordar cuál era",relojes:"Digital retro, correa de acero",
   perfumes:"Aromático, bergamota y pimienta"}[e.target.value]};
 $("add").onclick=()=>{clearForm();$("f_cat").value=cat;$("f_cat").onchange({target:$("f_cat")});$("dlg").showModal()};
-const clearForm=()=>{["f_name","f_store","f_price","f_art","f_size","f_url","f_photo","f_desc","q_url"].forEach(i=>$(i).value="");
+let pending=null;
+const clearForm=()=>{pending=null;document.querySelector("form.fm").classList.remove("shop");$("q_pv").hidden=true;["f_name","f_store","f_price","f_art","f_size","f_url","f_photo","f_desc","q_url"].forEach(i=>$(i).value="");
  $("q_res").className="detect";$("q_res").textContent="";$("q_raw").className="raw";$("q_raw").textContent="";
  $("q_raw_t").hidden=true;$("q_raw_t").textContent="Ver texto reconocido"};
 $("dlg").addEventListener("close",()=>{const d=$("dlg");
@@ -679,6 +691,9 @@ $("dlg").addEventListener("close",()=>{const d=$("dlg");
   type:v("f_cat")==="ropa"?"top":v("f_cat").slice(0,-1),label_price:p,price:p,label_size:v("f_size"),
   url:v("f_url"),photo:v("f_photo"),name:v("f_name"),desc:v("f_desc"),wanted:[],
   added:new Date().toISOString().slice(0,10)};
+ if(pending&&it.category==="ropa"){it.type=pending.type;it.wanted=pending.wanted;it.in_my_size=pending.in_my_size;it.sizes=pending.sizes}
+ if(pending&&pending.op>p)it.original_price=pending.op;
+ pending=null;
  local.push(it);ls.s(K.loc,JSON.stringify(local));
  clearForm();
  cat=it.category;ls.s("ropa_tab",cat);merge();tabs();filters();grid()});
@@ -687,5 +702,60 @@ fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
  remote=d.items.map(i=>({...i,original_price:i.original_price||0}));
  $("upd").textContent="Actualizado "+new Date(d.updated).toLocaleString("es-ES",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
 }).catch(()=>{$("upd").textContent="Sin datos del repositorio"})
- .finally(()=>{merge();tabs();filters();grid()});
+ .finally(()=>{merge();tabs();filters();grid();fromShop()});
+
+// ---- Datos que envía el botón "+ A mi cesta" desde la ficha de la tienda ----
+const MY={letras:["M","L"],numero:["40","42"],calzado:["40.5","41","41.5","42"]};
+function sizePlan(name,sz){
+ const vals=sz.map(s=>String(s[0]).toUpperCase().replace(",","."));
+ if(/zapatill|zapato|sneaker|\bbotas?\b|botín|deportiv|mocas|sandalia|chancla/i.test(name)||vals.some(v=>/^\d{2}\.5$/.test(v)))
+  return{type:"shoe",wanted:MY.calzado};
+ if(vals.some(v=>/^(X{0,3}S|M|X{0,3}L)$/.test(v))||!vals.length)
+  return{type:/pantal|jogger|vaquer|jeans|bermuda|short|chino|falda/i.test(name)&&!vals.length?"bottom":"top",
+   wanted:/pantal|vaquer|jeans|chino/i.test(name)&&!vals.length?MY.numero:MY.letras};
+ return{type:"bottom",wanted:MY.numero}}
+function fromShop(){
+ if(!location.hash.startsWith("#add="))return;
+ let d;try{d=JSON.parse(decodeURIComponent(location.hash.slice(5)))}catch(e){return}
+ history.replaceState(null,"",location.pathname+location.search);
+ const url=d.c&&/^https?:/.test(d.c)?d.c:d.u, r=detectFromText(url||"")||{};
+ const txt=(d.n||"")+" "+(d.d||"");
+ const k=d.k||(d.ml?"perfumes":"")||(d.mm&&/reloj|watch/i.test(txt)?"relojes":"")||"ropa";
+ clearForm();
+ $("f_cat").value=k;$("f_cat").onchange({target:$("f_cat")});
+ $("f_name").value=d.n||r.name||"";$("f_store").value=r.store||"";
+ if(d.p)$("f_price").value=Number(d.p).toFixed(2).replace(".",",");
+ $("f_art").value=r.art||"";$("f_url").value=url||"";
+ if(/^https?:/.test(d.img||""))$("f_photo").value=d.img;
+ $("f_desc").value=d.d||"";
+ const sz=Array.isArray(d.sz)?d.sz:[],got=[],miss=[];
+ let extra="";
+ if(k==="perfumes"){
+  const vs=sz.filter(x=>/ml$/i.test(x[0]));
+  if(vs.length){const okv=vs.filter(x=>x[1]).map(x=>x[0].replace(/\s?ml/i,""));
+   $("f_size").value=okv.join("/")||d.ml;got.push("ml");
+   extra=" Tamaños: "+vs.map(x=>x[0]+(x[1]?(x[2]?" "+fmt(x[2]):""):" agotado")).join(" · ")+". El precio es el del primero; cámbialo si quieres otro."}
+  else if(d.ml){$("f_size").value=d.ml;got.push("ml")}else miss.push("ml")}
+ else if(k==="relojes"){if(d.mm){$("f_size").value=d.mm;got.push("tamaño de caja")}else miss.push("tamaño de caja")}
+ else{
+  const plan=sizePlan(d.n||"",sz),norm=v=>String(v).toUpperCase().replace(",",".");
+  const mine=sz.length?plan.wanted.filter(w=>sz.some(s=>norm(s[0])===w&&s[1])):null;
+  pending={type:plan.type,wanted:plan.wanted,in_my_size:mine,sizes:sz,op:d.op||0};
+  if(sz.length){got.push("tallas");$("f_size").value=mine.length?mine.join(", "):"sin tu talla"}
+  else miss.push("tallas");
+ }
+ if(!pending)pending={op:d.op||0};
+ [["nombre",d.n],["precio",d.p],["foto",d.img],["tienda",r.store]].forEach(([l,v])=>(v?got:miss).push(l));
+ if(d.op>d.p)got.push("precio anterior (rebajado)");
+ document.querySelector("form.fm").classList.add("shop");
+ $("q_pv").hidden=false;$("q_pv_img").src=/^https?:/.test(d.img||"")?d.img:"icon-512.png";
+ $("q_pv_img").referrerPolicy="no-referrer";
+ $("q_pv_st").textContent=r.store||"";$("q_pv_n").textContent=d.n||"";
+ $("q_pv_p").innerHTML=d.p?fmt(+d.p)+(d.op>d.p?"<s>"+fmt(+d.op)+"</s>":""):"";
+ const box=$("q_res");box.className="detect "+(d.p&&d.n?"ok":"bad");
+ box.textContent="Leído de "+(r.store||"la tienda")+": "+got.join(", ")+"."+
+  (miss.length?" No encontrado: "+miss.join(", ")+".":"")+
+  extra+(miss.includes("tallas")?" Si la tienda esconde las tallas, abre su selector de tallas y vuelve a pulsar el botón.":"")+
+  " Revisa y pulsa Añadir.";
+ $("dlg").showModal()}
 </script></body></html>
