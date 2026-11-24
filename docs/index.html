@@ -165,6 +165,21 @@ body.has-sel .toast{bottom:calc(206px + env(safe-area-inset-bottom))}
 .edit svg{width:14px;height:14px}.edit:hover{background:var(--line)}
 .edit+.open{margin-left:0}
 form.fm.editing .quick{display:none}
+fieldset.sz{border:1px solid var(--line);border-radius:16px;padding:10px 12px 12px;margin:0;display:grid;gap:10px}
+fieldset.sz legend{font:600 12px var(--sans);color:var(--mut);padding:0 6px}
+.wide{width:100%;height:46px;border-radius:14px;border:0;font:600 14px var(--sans);cursor:pointer}
+.login{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;
+ padding:calc(24px + env(safe-area-inset-top)) var(--pad) calc(24px + env(safe-area-inset-bottom))}
+.login[hidden]{display:none!important}
+.lg{width:min(360px,100%);display:grid;gap:14px;text-align:center;justify-items:center}
+.lg .logo{width:68px;height:68px;border-radius:18px}
+.lg h2{font:400 clamp(34px,10vw,44px)/1 var(--serif);margin:4px 0 8px}.lg h2 em{font-style:italic;color:var(--accent)}
+.lg label{width:100%;display:grid;gap:6px;font:600 12px var(--sans);color:var(--mut);text-align:left}
+.lg_letter{justify-items:center;text-align:center!important}
+#lg_l{width:84px;height:84px;font:400 44px/1 var(--serif);text-align:center;border-radius:22px;padding:0}
+#lg_go{width:100%;height:52px;border-radius:16px;font:600 16px var(--sans);cursor:pointer}
+#lg_go:disabled{opacity:.6}
+.lg .detect{width:100%;text-align:left}
 #f_art[readonly]{opacity:.6}
 .open{margin-left:auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface-2);transition:background .2s,transform .2s var(--ease)}
 .open svg{width:14px;height:14px}
@@ -279,7 +294,7 @@ form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{di
   <div class="sub"><span id="upd">Cargando…</span><button id="syncst" type="button"></button><button id="rest" hidden></button><button id="exp" hidden></button></div>
  </div>
  <div class="hd-act">
-  <button id="settings" class="icon-btn" type="button" aria-label="Sincronizar entre dispositivos">
+  <button id="settings" class="icon-btn" type="button" aria-label="Tu cuenta">
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 7.97"/><path d="M12 12v7M9 16l3 3 3-3"/></svg>
   </button>
   <button id="theme" class="icon-btn" type="button" aria-label="Cambiar entre modo claro y oscuro">
@@ -361,21 +376,28 @@ form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{di
 
 <dialog id="cfg" aria-labelledby="cfg_t"><form class="fm" method="dialog">
  <div class="grab"></div>
- <h3 id="cfg_t">Sincronizar</h3>
- <p class="hint" style="font-size:13px;margin:0">Lo que añadas, edites o quites se guardará en tu repositorio de GitHub: aparecerá en todos tus dispositivos y entrará en el seguimiento de precios. La clave se guarda <b>solo en este navegador</b>; repite esto una vez en cada dispositivo.</p>
- <label>Repositorio<input id="c_repo" placeholder="usuario/repositorio" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
- <label>Clave de acceso de GitHub<input id="c_tok" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
- <details class="hint"><summary style="cursor:pointer;font-weight:600;color:var(--ink)">Cómo crear la clave (2 minutos)</summary><ol style="padding-left:18px;margin:8px 0 0">
-  <li>Abre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → nueva clave de acceso (fine-grained)</a>.</li>
-  <li>Nombre: <b>cesta</b>. Caducidad: la que prefieras.</li>
-  <li><b>Repository access</b> → <b>Only select repositories</b> → elige solo este repositorio.</li>
-  <li><b>Permissions</b> → <b>Contents</b>: <b>Read and write</b>. Nada más.</li>
-  <li>Pulsa <b>Generate token</b>, cópiala y pégala arriba.</li></ol></details>
+ <h3 id="cfg_t">Tu cuenta</h3>
+ <p class="hint" id="c_who" style="font-size:13px;margin:0"></p>
  <div class="detect" id="c_res"></div>
+ <fieldset class="sz"><legend>Tus tallas (para saber si hay la tuya)</legend>
+  <label>Ropa de letras<input id="c_sl" placeholder="M / L" autocomplete="off"></label>
+  <label>Pantalones de número<input id="c_sn" placeholder="40 / 42" autocomplete="off"></label>
+  <label>Calzado<input id="c_sc" placeholder="40,5 / 41 / 41,5 / 42" autocomplete="off"></label>
+ </fieldset>
+ <button type="button" class="b2 wide" id="c_imp" hidden>Importar la cesta anterior</button>
  <div class="act"><button value="cancel" class="b2" type="submit" formnovalidate>Cerrar</button>
-  <button id="c_ok" class="b1" type="button">Guardar y probar</button></div>
- <button id="c_off" type="button" class="toggle" hidden>Desactivar la sincronización en este dispositivo</button>
+  <button id="c_ok" class="b1" type="button">Guardar tallas</button></div>
+ <button id="c_out" type="button" class="toggle">Cerrar sesión en este dispositivo</button>
 </form></dialog>
+<div class="login" id="login" hidden><form id="lg_f" class="lg" autocomplete="on">
+ <img src="icon-512.png" alt="" width="68" height="68" class="logo">
+ <h2>Cesta de <em>deseos</em></h2>
+ <label id="lg_el">Tu correo<input id="lg_email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false"></label>
+ <label class="lg_letter">Tu letra<input id="lg_l" maxlength="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Tu letra de acceso"></label>
+ <button class="b1" id="lg_go" type="submit">Entrar</button>
+ <button type="button" id="lg_other" class="toggle" hidden>Entrar con otra cuenta</button>
+ <div class="detect" id="lg_res"></div>
+</form></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -418,7 +440,7 @@ const ls={g(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},s(k,v
 const getSet=k=>{try{return new Set(JSON.parse(ls.g(k,"[]")))}catch(e){return new Set()}};
 const putSet=(k,s)=>ls.s(k,JSON.stringify([...s]));
 const getArr=k=>{try{return JSON.parse(ls.g(k,"[]"))}catch(e){return[]}};
-let cart=getSet(K.cart),hidden=getSet(K.hid),local=getArr(K.loc),remote=[],items=[],
+let cart=getSet(K.cart),hidden=new Set(),local=getArr(K.loc),remote=[],items=[],
     cat=ls.g("ropa_tab","ropa"),store_f="",q="",sort="def";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -445,11 +467,7 @@ $("theme").onclick=()=>{const d=document.documentElement,
  cur=d.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
  d.dataset.theme=cur==="dark"?"light":"dark";ls.s(K.th,d.dataset.theme)};
 
-function merge(){
- const rA=new Set(remote.map(i=>i.art));
- items=[...remote.map(i=>edits[i.art]?{...i,...edits[i.art]}:i),
-  ...local.filter(i=>!rA.has(i.art)).map(i=>({...i,_local:true,
-   history:i.history||[{date:i.added||"",price:i.price,source:"manual"}],status:i.status||"manual"}))]}
+function merge(){const pa=pendingArts();items=remote.map(i=>pa.has(i.art)?{...i,_pending:true}:i)}
 const vis=()=>items.filter(i=>!hidden.has(i.art));
 const inCat=()=>vis().filter(i=>(i.category||"ropa")===cat);
 const sel=()=>vis().filter(i=>cart.has(i.art));
@@ -514,7 +532,7 @@ function grid(){
     <div class="price"><span class="now">${fmt(it.price)}</span>${it.original_price>it.price?`<s>${fmt(it.original_price)}</s>`:""}${dn<0?`<span class="dn">${fmt(dn)}</span>`:""}
      <button class="edit" type="button" aria-label="Editar ${esc(it.name)}" title="Editar">${I_EDIT}</button>
      ${u?`<a class="open" href="${esc(u)}" target="_blank" rel="noopener" aria-label="Abrir en ${st}" title="Abrir en ${st}">${I_EXT}</a>`:""}</div>
-    <div class="meta">${sz}${showRef?`<span class="ref">${esc(it.art)}</span>`:""}${it._local&&!it.synced?`<span class="chip warn">${syncOn()?"Subiendo…":"Solo en este móvil"}</span>`:""}</div>
+    <div class="meta">${sz}${showRef?`<span class="ref">${esc(it.art)}</span>`:""}${it._pending?`<span class="chip warn">Guardando…</span>`:""}</div>
    </div>`;
   c.querySelector(".cam").onclick=ev=>{ev.preventDefault();ev.stopPropagation();
    if(photos[it.art]&&confirm("Esta prenda ya tiene una foto tuya. ¿Quitarla?\n\nCancelar = elegir otra foto")){
@@ -524,8 +542,8 @@ function grid(){
   c.querySelector(".chk").onchange=e=>{e.target.checked?cart.add(it.art):cart.delete(it.art);
    c.classList.toggle("on",e.target.checked);putSet(K.cart,cart);total()};
   g.appendChild(c)});
- $("rest").hidden=!hidden.size;if(hidden.size)$("rest").textContent=`Restaurar ${hidden.size} oculto(s)`;
- {const un=local.filter(i=>!i.synced).length;$("exp").hidden=!un||syncOn();if(un)$("exp").textContent=`Exportar ${un} añadido(s)`}
+ 
+ 
  syncStatus();
  total()}
 
@@ -552,18 +570,10 @@ function report(){
 $("q").oninput=e=>{q=e.target.value.trim();grid()};
 $("sort").onchange=e=>{sort=e.target.value;grid()};
 $("clr").onclick=()=>{cart.clear();putSet(K.cart,cart);grid()};
-$("rest").onclick=()=>{hidden.clear();putSet(K.hid,hidden);tabs();filters();grid()};
 $("del").onclick=()=>{const s=sel();if(!s.length)return;
- const on=syncOn();
- if(!confirm(on?`¿Quitar ${s.length} artículo(s) de la cesta en todos tus dispositivos?`:`¿Quitar ${s.length} artículo(s) de la cesta?`))return;
- const arts=s.map(i=>i.art);
- local=local.filter(i=>!arts.includes(i.art));ls.s(K.loc,JSON.stringify(local));
- if(on){remote=remote.filter(i=>!arts.includes(i.art));enqueue({op:"del",arts})}
- else s.forEach(i=>{if(!i._local)hidden.add(i.art)});
- arts.forEach(a=>cart.delete(a));putSet(K.hid,hidden);putSet(K.cart,cart);merge();tabs();filters();grid()};
-$("exp").onclick=()=>{const t=JSON.stringify(local.map(({_local,history,status,added,...r})=>r),null,1);
- navigator.clipboard?.writeText(t).then(()=>alert("Copiado. Pégalo dentro de items.json, en GitHub."),
-  ()=>prompt("Copia este texto en items.json:",t))};
+ if(!confirm(`¿Quitar ${s.length} artículo(s) de la cesta?`))return;
+ const arts=s.map(i=>i.art);remote=remote.filter(i=>!arts.includes(i.art));
+ arts.forEach(a=>cart.delete(a));putSet(K.cart,cart);enqueue({op:"del",arts});merge();tabs();filters();grid()};
 $("mail").onclick=()=>{const r=report();let to=ls.g(K.mail,null);
  if(to===null){to=prompt("Correo de destino (se guarda solo en este dispositivo):","")||"";ls.s(K.mail,to)}
  const u=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent("Cesta de deseos "+r.d)}&body=${encodeURIComponent(r.text)}`;
@@ -748,7 +758,7 @@ $("dlg").addEventListener("close",()=>{const d=$("dlg");
 
 // ---- Alta, edición y deshacer ----
 const TYPE_OF={ropa:"top",relojes:"watch",perfumes:"perfume"};
-let edits={};try{edits=JSON.parse(ls.g("ropa_edits","{}"))}catch(e){}
+const today=()=>new Date().toISOString().slice(0,10);
 function formToNew(){
  const v=id=>$(id).value.trim(),p=parseFloat(v("f_price").replace(",","."));
  if(!v("f_name")||!(p>=0))return null;
@@ -756,7 +766,7 @@ function formToNew(){
  const it={art:v("f_art")||"m"+Date.now().toString(36),noref:!v("f_art"),store:v("f_store")||"—",category:c,
   type:plan?plan.type:TYPE_OF[c],label_price:p,price:p,label_size:v("f_size"),url:v("f_url"),
   photo:/^https?:\/\//.test(v("f_photo"))?v("f_photo"):"",name:v("f_name"),desc:v("f_desc"),
-  wanted:plan?plan.wanted:[],in_my_size:null,added:new Date().toISOString().slice(0,10)};
+  wanted:plan?plan.wanted:[],in_my_size:null,added:today()};
  if(pending&&c==="ropa"&&pending.wanted){it.type=pending.type;it.wanted=pending.wanted;it.in_my_size=pending.in_my_size;it.sizes=pending.sizes}
  if(pending&&pending.op>p)it.original_price=pending.op;
  return it}
@@ -765,50 +775,48 @@ function formPatch(art){
  if(!v("f_name")||!(p>=0))return null;
  const old=items.find(i=>i.art===art)||{},c=v("f_cat");
  const patch={name:v("f_name"),store:v("f_store")||"—",category:c,label_size:v("f_size"),url:v("f_url"),
-  photo:/^https?:\/\//.test(v("f_photo"))?v("f_photo"):"",desc:v("f_desc")};
- if(Math.abs(p-(+old.price||0))>.004){patch.price=p;patch.label_price=p;patch.manual_price=p}
+  photo:/^https?:\/\//.test(v("f_photo"))?v("f_photo"):"",desc:v("f_desc"),price:p};
  if((old.category||"ropa")!==c){const pl=c==="ropa"?sizePlan(patch.name,[]):null;
   patch.type=pl?pl.type:TYPE_OF[c];patch.wanted=pl?pl.wanted:[];patch.in_my_size=null}
- const na=v("f_art");if(old._local&&na&&na!==art){patch.art=na;patch.noref=false}
+ const na=v("f_art");if(na&&na!==art){patch.art=na;patch.noref=false}
  return patch}
-function renameKey(a,b){[cart,hidden].forEach(S=>{if(S.has(a)){S.delete(a);S.add(b)}});
- if(photos[a]){photos[b]=photos[a];delete photos[a];ls.s(K.pho,JSON.stringify(photos))}
- putSet(K.cart,cart);putSet(K.hid,hidden)}
+function renameKey(a,b){if(cart.has(a)){cart.delete(a);cart.add(b);putSet(K.cart,cart)}
+ if(photos[a]){photos[b]=photos[a];delete photos[a];ls.s(K.pho,JSON.stringify(photos))}}
 function applyPatch(art,patch,msg){
- const li=local.findIndex(i=>i.art===art);
- if(li>=0){local[li]={...local[li],...patch};if(patch.art&&patch.art!==art)renameKey(art,patch.art);ls.s(K.loc,JSON.stringify(local))}
- else{const {art:_,...rest}=patch;edits[art]={...(edits[art]||{}),...rest};ls.s("ropa_edits",JSON.stringify(edits))}
- enqueue({op:"edit",art,patch});
+ const i=remote.findIndex(x=>x.art===art);if(i<0)return;
+ const old=remote[i],it={...old,...patch};
+ if(patch.price!=null&&Math.abs(patch.price-(+old.price||0))>.004)
+  it.history=[...(old.history||[]),{date:today(),price:patch.price,source:"manual"}];
+ remote[i]=it;
+ if(patch.art&&patch.art!==art){renameKey(art,patch.art);enqueue({op:"del",arts:[art]})}
+ enqueue({op:"put",row:toRow(it)});
  merge();tabs();filters();grid();
  if(msg)toast(`<div class="tx"><b>${esc(msg)}</b></div>`)}
+const sameRef=(a,b)=>{if(a===b)return true;const x=String(a).split("/"),y=String(b).split("/");
+ return x.length>=2&&y.length>=2&&x[0]===y[0]&&x[1]===y[1]&&(x.length===2||y.length===2)};
 function commitAdd(it,info){
- // mismo producto: misma referencia, o la misma sin color (Zara no pone el color en la URL) en la misma tienda
- const sameRef=(a,b)=>{if(a===b)return true;const x=String(a).split("/"),y=String(b).split("/");
-  return x.length>=2&&y.length>=2&&x[0]===y[0]&&x[1]===y[1]&&(x.length===2||y.length===2)};
- const dup=it.noref?null:items.find(i=>!i.noref&&(i.store||"")===(it.store||"")&&sameRef(i.art,it.art));
- if(dup){const {art,added,...rest}=it;
-  if(Math.abs((+dup.price||0)-it.price)>.004)rest.manual_price=it.price;else{delete rest.price;delete rest.label_price}
+ const dup=it.noref?null:remote.find(i=>!i.noref&&(i.store||"")===(it.store||"")&&sameRef(i.art,it.art));
+ if(dup){const {art,added,history,...rest}=it;
   applyPatch(dup.art,rest);cat=dup.category||"ropa";ls.s("ropa_tab",cat);tabs();filters();grid();
   showAdded(dup.art,"Ya estaba en tu cesta: datos actualizados");return}
- local.push(it);ls.s(K.loc,JSON.stringify(local));enqueue({op:"add",item:it});
+ it.history=[{date:today(),price:it.price,source:"alta"}];it.status="manual";
+ remote.push(it);enqueue({op:"put",row:toRow(it)});
  cat=it.category;ls.s("ropa_tab",cat);merge();tabs();filters();grid();
  showAdded(it.art,"Añadido a tu cesta"+(info||""))}
 function showAdded(art,msg){const it=items.find(i=>i.art===art);if(!it)return;const src=pic(it);
  toast(`${src?`<img src="${esc(src)}" alt="" referrerpolicy="no-referrer">`:""}<div class="tx"><b>${esc(msg)}</b><span>${esc(it.name)} · ${fmt(it.price)}</span></div>`,
   [["Editar",()=>openEdit(items.find(i=>i.art===art))],["Deshacer",()=>undoAdd(art)]],8000);
  setTimeout(()=>{const card=[...document.querySelectorAll(".card")].find(c=>c.dataset.art===art);if(card)card.scrollIntoView({behavior:"smooth",block:"center"})},120)}
-function undoAdd(art){const li=local.findIndex(i=>i.art===art);
- if(li>=0){local.splice(li,1);ls.s(K.loc,JSON.stringify(local));
-  const q=getQ(),qi=q.findIndex(o=>o.op==="add"&&o.item.art===art);
-  if(qi>=0&&!flushing){q.splice(qi,1);setQ(q)}else enqueue({op:"del",arts:[art]})}
+function undoAdd(art){remote=remote.filter(i=>i.art!==art);
+ const q=getQ(),qi=q.findIndex(o=>o.op==="put"&&o.row.art===art);
+ if(qi>=0&&!flushing){q.splice(qi,1);setQ(q)}else enqueue({op:"del",arts:[art]});
  merge();tabs();filters();grid();toast(`<div class="tx"><b>Deshecho</b></div>`,[],2500)}
 function openEdit(it){if(!it)return;
  clearForm();editing=it.art;
  document.querySelector("#dlg form").classList.add("editing");$("dlg_t").textContent="Editar";$("f_ok").textContent="Guardar";
  $("f_cat").value=it.category||"ropa";$("f_cat").onchange({target:$("f_cat")});
  $("f_name").value=it.name||"";$("f_store").value=it.store||"";$("f_price").value=Number(it.price||0).toFixed(2).replace(".",",");
- $("f_art").value=it.noref?"":(it.art||"");$("f_art").readOnly=!it._local;
- $("f_size").value=it.label_size||"";$("f_url").value=it.url||"";
+ $("f_art").value=it.noref?"":(it.art||"");$("f_size").value=it.label_size||"";$("f_url").value=it.url||"";
  const ph=it.photo||it.image||"";$("f_photo").value=/^https?:\/\//.test(ph)?ph:"";$("f_desc").value=it.desc||"";
  $("dlg").showModal()}
 let toastT;
@@ -817,111 +825,150 @@ function toast(html,actions=[],ms=5000){const t=$("toast");
  t.querySelectorAll("button").forEach(b=>b.onclick=()=>{t.classList.remove("show");actions[+b.dataset.i][1]()});
  t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),ms)}
 
-// ---- Sincronización con GitHub: cola de cambios que se sube en un solo commit ----
-const cfg=()=>{try{return JSON.parse(ls.g("ropa_sync","{}"))}catch(e){return{}}};
-const syncOn=()=>{const c=cfg();return !!(c.repo&&c.token)};
-const getQ=()=>{try{return JSON.parse(ls.g("ropa_queue","[]"))}catch(e){return[]}};
-const setQ=q=>ls.s("ropa_queue",JSON.stringify(q));
+// ---- Cuenta y datos en Supabase ----
+// La clave publicable está hecha para ir dentro de la web: lo que protege los datos es la sesión
+// de cada usuario y las reglas de la base de datos (cada uno solo ve y toca lo suyo).
+const SB_URL=ls.g("ropa_sb_url","https://pmygciapqksrsahdtzgv.supabase.co"),
+      SB_KEY="sb_publishable_U6Nubm2_euTX4z7OMC3GWg_CEML2j97",PW=l=>"0".repeat(5)+l;
+let sess=null;try{sess=JSON.parse(ls.g("ropa_sess","null"))}catch(e){}
 let flushing=false,syncErr="";
-function repoGuess(){const m=location.hostname.match(/^([\w-]+)\.github\.io$/i),r=location.pathname.split("/").filter(Boolean)[0];
- return m&&r&&!/\.html$/.test(r)?m[1]+"/"+r:""}
-const API=()=>ls.g("ropa_api","https://api.github.com");
-function b64e(str){const b=new TextEncoder().encode(str);let s="";for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
-function b64d(x){const s=atob(String(x).replace(/\s/g,"")),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return new TextDecoder().decode(u)}
-async function gh(path,opt={}){const c=cfg();
- const r=await fetch(API()+"/repos/"+c.repo+"/contents/"+path,{cache:"no-store",...opt,
-  headers:{Authorization:"Bearer "+c.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",
-   ...(opt.body?{"Content-Type":"application/json"}:{})}});
- if(!r.ok){const e=new Error("GitHub "+r.status);e.status=r.status;throw e}
- return r.json()}
-function toRepo(it){const o={art:it.art,store:it.store,category:it.category||"ropa",type:it.type||TYPE_OF[it.category||"ropa"],
-  label_price:+it.label_price||+it.price||0,label_size:it.label_size||"",url:it.url||"",name:it.name||"",desc:it.desc||"",
-  photo:/^https?:\/\//.test(it.photo||"")?it.photo:"",wanted:it.wanted||[],added:it.added||""};
- if(it.noref)o.noref=true;
- if(it.original_price>it.price)o.label_original=it.original_price;
- if(it.in_my_size!==undefined&&it.in_my_size!==null)o.in_my_size=it.in_my_size;
- if(it.sizes&&it.sizes.length)o.sizes=it.sizes;
- if(it.manual_price!=null)o.manual_price=it.manual_price;
- return o}
-function applyOp(arr,o){
- if(o.op==="add"){const i=arr.findIndex(x=>x.art===o.item.art);if(i<0)arr.push(toRepo(o.item));else arr[i]={...arr[i],...toRepo(o.item)}}
- else if(o.op==="edit"){const i=arr.findIndex(x=>x.art===o.art);if(i<0)return;
-  const OKK=["art","name","store","category","type","label_price","label_size","url","desc","photo","wanted","noref","in_my_size","sizes","manual_price"];
-  const p={};OKK.forEach(k=>{if(o.patch[k]!==undefined)p[k]=o.patch[k]});
-  if(p.photo!==undefined&&!/^https?:\/\//.test(p.photo))p.photo="";
-  const lp=p.label_price!=null?p.label_price:arr[i].label_price;
-  arr[i]={...arr[i],...p};
-  if(o.patch.original_price!==undefined){if(o.patch.original_price>lp)arr[i].label_original=o.patch.original_price;else delete arr[i].label_original}
-  if(p.in_my_size===null)delete arr[i].in_my_size}
- else if(o.op==="del")arr.splice(0,arr.length,...arr.filter(x=>!o.arts.includes(x.art)))}
-function enqueue(o){if(!syncOn())return;const q=getQ();q.push(o);setQ(q);syncStatus();flush()}
+const UK=k=>k+"_"+((sess&&sess.uid)||"x");
+const getQ=()=>{try{return JSON.parse(ls.g(UK("ropa_q"),"[]"))}catch(e){return[]}};
+const setQ=q=>ls.s(UK("ropa_q"),JSON.stringify(q));
+const pendingArts=()=>new Set(getQ().flatMap(o=>o.op==="put"?[o.row.art]:[]));
+async function authReq(grant,body){
+ const r=await fetch(SB_URL+"/auth/v1/token?grant_type="+grant,{method:"POST",
+  headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+ const j=await r.json().catch(()=>({}));
+ if(!r.ok){const e=new Error(j.msg||j.error_description||("acceso "+r.status));e.status=r.status;e.code=j.error_code||j.error||"";throw e}
+ sess={at:j.access_token,rt:j.refresh_token,exp:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),
+  uid:(j.user&&j.user.id)||(sess&&sess.uid),email:(j.user&&j.user.email)||(sess&&sess.email)};
+ ls.s("ropa_sess",JSON.stringify(sess));return sess}
+async function token(){
+ if(!sess)throw Object.assign(new Error("sin sesión"),{status:401});
+ if(sess.exp-60<Date.now()/1000){
+  try{await authReq("refresh_token",{refresh_token:sess.rt})}
+  catch(e){if(e.status&&e.status<500)throw Object.assign(new Error("sesión caducada"),{status:401});throw e}}
+ return sess.at}
+async function rest(path,opt={},again=true){
+ const t=await token();
+ const r=await fetch(SB_URL+"/rest/v1/"+path,{cache:"no-store",...opt,
+  headers:{apikey:SB_KEY,Authorization:"Bearer "+t,"Content-Type":"application/json",...(opt.headers||{})}});
+ if(r.status===401&&again){sess.exp=0;return rest(path,opt,false)}
+ if(!r.ok){const j=await r.json().catch(()=>({}));const e=new Error(j.message||("error "+r.status));e.status=r.status;e.code=j.code||"";throw e}
+ const tx=await r.text();return tx?JSON.parse(tx):null}
+// fila de la base de datos <-> artículo de la app
+function toRow(it){const data={};
+ for(const[k,v]of Object.entries(it))if(!k.startsWith("_")&&!["art","history","price","status"].includes(k)&&v!==undefined)data[k]=v;
+ return{art:it.art,data,history:it.history&&it.history.length?it.history:[{date:today(),price:+it.price||0,source:"alta"}],
+  price:+it.price||0,status:it.status||"manual"}}
+function toItem(r){const d=r.data||{};
+ return{...d,art:r.art,price:+r.price||0,status:r.status||"manual",original_price:+d.original_price||0,
+  history:Array.isArray(r.history)&&r.history.length?r.history:[{date:"",price:+r.price||0,source:"alta"}]}}
+const setCache=()=>ls.s(UK("ropa_cache"),JSON.stringify(remote.map(toRow)));
+const getCache=()=>{try{return JSON.parse(ls.g(UK("ropa_cache"),"[]")).map(toItem)}catch(e){return[]}};
+function enqueue(o){const q=getQ();q.push(o);setQ(q);setCache();syncStatus();flush()}
 async function flush(){
- if(!syncOn()||flushing)return;const q=getQ();if(!q.length){syncStatus();return}
+ if(!sess||flushing)return;let q=getQ();if(!q.length){syncStatus();return}
  flushing=true;syncErr="";syncStatus();
  try{
-  let done=false;
-  for(let n=0;n<3&&!done;n++){
-   const f=await gh("items.json"),arr=JSON.parse(b64d(f.content));
-   q.forEach(o=>applyOp(arr,o));
-   const adds=q.filter(o=>o.op==="add").length,eds=q.filter(o=>o.op==="edit").length,dels=q.filter(o=>o.op==="del").reduce((a,o)=>a+o.arts.length,0);
-   const msg="Cesta: "+[adds&&adds+" añadido(s)",eds&&eds+" editado(s)",dels&&dels+" quitado(s)"].filter(Boolean).join(", ");
-   try{await gh("items.json",{method:"PUT",body:JSON.stringify({message:msg,content:b64e(JSON.stringify(arr,null,1)+"\n"),sha:f.sha})});done=true}
-   catch(e){if(e.status!==409&&e.status!==422)throw e}}
-  if(!done)throw new Error("conflicto");
-  const added=q.filter(o=>o.op==="add").map(o=>o.item.art);
-  local.forEach(i=>{if(added.includes(i.art))i.synced=true});ls.s(K.loc,JSON.stringify(local));
-  setQ(getQ().slice(q.length));
+  while(q.length){
+   if(q[0].op==="put"){let n=0;const by={};while(n<q.length&&q[n].op==="put"){by[q[n].row.art]=q[n].row;n++}
+    await rest("items?on_conflict=owner,art",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+     body:JSON.stringify(Object.values(by))});
+    q=getQ().slice(n)}
+   else if(q[0].op==="del"){const list=q[0].arts.map(a=>'"'+String(a).replace(/["\\]/g,"\\$&")+'"').join(",");
+    await rest("items?art=in.("+encodeURIComponent(list)+")",{method:"DELETE",headers:{Prefer:"return=minimal"}});
+    q=getQ().slice(1)}
+   else q=getQ().slice(1);
+   setQ(q)}
  }catch(e){
-  syncErr=e.status===401||e.status===403?"clave sin permiso":e.status===404?"repositorio no encontrado":e.status?"error "+e.status:"sin conexión"}
- finally{flushing=false;merge();grid();if(!syncErr&&getQ().length)setTimeout(flush,400)}}
-function syncStatus(){const b=$("syncst");if(!b)return;
- const n=getQ().length;b.className="";
- if(!syncOn()){b.textContent="Sincronizar";return}
- if(syncErr){b.className="bad";b.textContent="⚠ No sincronizado: "+syncErr+(n?` (${n} pendiente${n>1?"s":""})`:"");return}
+  syncErr=e.status===401?"sesión caducada":e.code==="PGRST205"||e.code==="42P01"?"falta crear la tabla (SQL)":e.status?"error "+e.status:"sin conexión";
+  if(e.status===401)showLogin("Tu sesión ha caducado. Vuelve a entrar.")}
+ finally{flushing=false;merge();grid();syncStatus()}}
+function syncStatus(){const b=$("syncst");if(!b)return;const n=getQ().length;b.className="";
+ if(!sess){b.textContent="";return}
+ if(syncErr){b.className="bad";b.textContent="⚠ "+syncErr+(n?` · ${n} pendiente${n>1?"s":""}`:"");return}
  if(flushing){b.textContent="Guardando…";return}
  if(n){b.className="warn";b.textContent=`${n} cambio${n>1?"s":""} pendiente${n>1?"s":""}`;return}
- b.className="ok";b.textContent="✓ Sincronizado"}
-function openCfg(){const c=cfg();$("c_repo").value=c.repo||repoGuess();$("c_tok").value="";
- $("c_tok").placeholder=c.token?"•••• clave guardada (déjalo vacío para mantenerla)":"github_pat_…";
- $("c_off").hidden=!syncOn();$("c_res").className="detect";$("c_res").textContent="";$("cfg").showModal()}
+ b.className="ok";b.textContent="✓ Guardado"}
+async function loadAll(){
+ remote=getCache();merge();tabs();filters();grid();
+ $("upd").textContent=sess.email||"";
+ try{
+  const rows=await rest("items?select=art,data,history,price,status,created_at&order=created_at.asc");
+  let list=rows.map(toItem);
+  getQ().forEach(o=>{if(o.op==="put"){const it=toItem(o.row),i=list.findIndex(x=>x.art===it.art);if(i<0)list.push(it);else list[i]=it}
+   else if(o.op==="del")list=list.filter(x=>!o.arts.includes(x.art))});
+  remote=list;setCache();syncErr="";
+  const st=await rest("settings?select=data");
+  MY={...MY_DEF,...((st&&st[0]&&st[0].data&&st[0].data.sizes)||{})};
+ }catch(e){
+  if(e.status===401){showLogin("Tu sesión ha caducado. Vuelve a entrar.");return}
+  syncErr=e.code==="PGRST205"||e.code==="42P01"?"falta crear la tabla (SQL)":"sin conexión: viendo la copia guardada"}
+ merge();tabs();filters();grid();syncStatus();fromShop();flush()}
+
+// ---- Pantalla de acceso: correo una vez por dispositivo; después solo la letra ----
+function showLogin(msg){const e=ls.g("ropa_email","");
+ $("lg_email").value=e;$("lg_el").hidden=!!e;$("lg_other").hidden=!e;$("lg_l").value="";
+ $("lg_res").className="detect"+(msg?" bad":"");$("lg_res").textContent=msg||"";
+ $("login").hidden=false;setTimeout(()=>(e?$("lg_l"):$("lg_email")).focus(),60)}
+$("lg_other").onclick=()=>{$("lg_el").hidden=false;$("lg_other").hidden=true;$("lg_email").value="";$("lg_email").focus()};
+$("lg_f").onsubmit=async ev=>{ev.preventDefault();
+ const email=$("lg_email").value.trim().toLowerCase(),l=$("lg_l").value.trim(),box=$("lg_res");
+ if(!email){$("lg_el").hidden=false;box.className="detect bad";box.textContent="Escribe tu correo.";return}
+ if(l.length!==1){box.className="detect bad";box.textContent="Escribe tu letra.";return}
+ $("lg_go").disabled=true;box.className="detect ok";box.textContent="Entrando…";
+ try{await authReq("password",{email,password:PW(l)});ls.s("ropa_email",email);
+  $("login").hidden=true;box.textContent="";await loadAll()}
+ catch(e){box.className="detect bad";
+  box.textContent=/invalid_credentials|invalid_grant/.test(e.code)||e.status===400&&!e.code?"Esa letra no corresponde a este correo.":
+   e.code==="email_not_confirmed"?"Tu usuario está sin confirmar: en Supabase, Authentication → Users, confírmalo.":
+   e.status===429?"Demasiados intentos. Espera unos minutos.":"No he podido conectar. Revisa la conexión."}
+ finally{$("lg_go").disabled=false}};
+
+// ---- Ventana de cuenta: tallas, importar la cesta anterior y cerrar sesión ----
+const szTxt=a=>(a||[]).map(x=>String(x).replace(".",",")).join(" / ");
+const szParse=t=>t.split(/\s*[\/;]\s*|\s{2,}|,\s+/).map(x=>x.trim().toUpperCase().replace(",",".")).filter(Boolean);
+async function oldBasket(){
+ const d=await fetch("data.json",{cache:"no-store"}).then(r=>r.ok?r.json():{items:[]}).catch(()=>({items:[]}));
+ let edits={};try{edits=JSON.parse(ls.g("ropa_edits","{}"))}catch(e){}
+ const list=(d.items||[]).map(r=>{const x={...r,...(edits[r.art]||{})};delete x.last_checked;return x});
+ getArr(K.loc).forEach(i=>{if(!list.some(x=>x.art===i.art))list.push(i)});
+ return list}
+async function openCfg(){
+ $("c_who").textContent=sess?"Sesión iniciada como "+sess.email+".":"";
+ $("c_sl").value=szTxt(MY.letras);$("c_sn").value=szTxt(MY.numero);$("c_sc").value=szTxt(MY.calzado);
+ $("c_res").className="detect";$("c_res").textContent="";$("c_imp").hidden=true;$("cfg").showModal();
+ try{const old=(await oldBasket()).filter(o=>!remote.some(r=>r.art===o.art));
+  if(old.length){$("c_imp").hidden=false;$("c_imp").textContent=`Importar la cesta anterior (${old.length} artículo${old.length>1?"s":""})`}}catch(e){}}
 $("settings").onclick=openCfg;$("syncst").onclick=openCfg;
-$("c_ok").onclick=async()=>{
- const repo=$("c_repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$|\/$/g,""),
-  tok=$("c_tok").value.trim()||cfg().token,box=$("c_res");
- if(!/^[\w.-]+\/[\w.-]+$/.test(repo)||!tok){box.className="detect bad";box.textContent="Falta el repositorio (usuario/nombre) o la clave.";return}
- const prev=ls.g("ropa_sync","");ls.s("ropa_sync",JSON.stringify({repo,token:tok}));
- box.className="detect ok";box.textContent="Comprobando…";
- try{await gh("items.json")}catch(e){
-  if(prev)ls.s("ropa_sync",prev);else{try{localStorage.removeItem("ropa_sync")}catch(_){}}
-  box.className="detect bad";box.textContent=e.status===401?"La clave no es válida o ha caducado.":
-   e.status===404?"No encuentro ese repositorio o su items.json (o la clave no tiene acceso a él).":
-   e.status===403?"La clave no tiene permiso sobre ese repositorio.":"No he podido conectar con GitHub.";return}
- const q=getQ(),queued=new Set(q.filter(o=>o.op==="add").map(o=>o.item.art));
- local.filter(i=>!i.synced&&!queued.has(i.art)).forEach(i=>q.push({op:"add",item:i}));
- const qe=new Set(q.filter(o=>o.op==="edit").map(o=>o.art));
- Object.entries(edits).forEach(([a,pt])=>{if(!qe.has(a))q.push({op:"edit",art:a,patch:pt})});setQ(q);
- box.textContent="Conectado. Subiendo cambios…";await flush();
- if(syncErr){box.className="detect bad";box.textContent="Conectado, pero no se pudo guardar: "+syncErr+". Revisa que la clave tenga Contents: Read and write."}
- else{box.className="detect ok";box.textContent="✓ Sincronización activada. Lo que añadas aquí aparecerá en tus otros dispositivos.";$("c_off").hidden=false}
- grid()};
-$("c_off").onclick=()=>{try{localStorage.removeItem("ropa_sync")}catch(e){}$("c_off").hidden=true;
- $("c_res").className="detect ok";$("c_res").textContent="Desactivada en este dispositivo.";grid()};
+$("c_ok").onclick=async()=>{const sizes={letras:szParse($("c_sl").value),numero:szParse($("c_sn").value),calzado:szParse($("c_sc").value)};
+ const box=$("c_res");box.className="detect ok";box.textContent="Guardando…";
+ try{await rest("settings?on_conflict=owner",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+   body:JSON.stringify({data:{sizes}})});MY={...MY_DEF,...sizes};box.textContent="✓ Tallas guardadas en tu cuenta."}
+ catch(e){box.className="detect bad";box.textContent="No se han podido guardar: "+(e.status?"error "+e.status:"sin conexión")}};
+$("c_imp").onclick=async()=>{const old=(await oldBasket()).filter(o=>!remote.some(r=>r.art===o.art));
+ old.forEach(o=>{const it={...o,history:o.history||[{date:o.added||today(),price:+o.price||+o.label_price||0,source:"etiqueta"}],
+  price:+o.price||+o.label_price||0};delete it._local;delete it.synced;remote.push(it)});
+ const q=getQ();old.forEach(o=>q.push({op:"put",row:toRow(remote.find(r=>r.art===o.art))}));setQ(q);
+ $("c_imp").hidden=true;$("c_res").className="detect ok";$("c_res").textContent=`Importando ${old.length} artículos…`;
+ merge();tabs();filters();grid();await flush();
+ $("c_res").className="detect "+(syncErr?"bad":"ok");
+ $("c_res").textContent=syncErr?"No se pudo terminar: "+syncErr+". Se reintentará solo.":`✓ ${old.length} artículos importados a tu cuenta.`;
+ if(!syncErr){try{localStorage.removeItem(K.loc);localStorage.removeItem("ropa_edits")}catch(e){}}};
+$("c_out").onclick=async()=>{
+ if(getQ().length&&!confirm("Hay cambios sin subir todavía. Si cierras sesión se perderán. ¿Cerrar igualmente?"))return;
+ try{await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+sess.at}})}catch(e){}
+ try{localStorage.removeItem(UK("ropa_cache"));localStorage.removeItem(UK("ropa_q"));localStorage.removeItem("ropa_sess")}catch(e){}
+ sess=null;remote=[];merge();grid();$("cfg").close();showLogin()};
 addEventListener("online",()=>flush());
 
-fetch("data.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
- remote=d.items.map(i=>({...i,original_price:i.original_price||0}));
- $("upd").textContent="Actualizado "+new Date(d.updated).toLocaleString("es-ES",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-}).catch(()=>{$("upd").textContent="Sin datos del repositorio"})
- .finally(()=>{
-  const rA=new Set(remote.map(i=>i.art));
-  local=local.filter(i=>!(i.synced&&rA.has(i.art)));ls.s(K.loc,JSON.stringify(local));
-  for(const a in edits){const r=remote.find(i=>i.art===a);
-   if(!r||Object.entries(edits[a]).every(([k,v])=>k==="manual_price"||JSON.stringify(r[k])===JSON.stringify(v)))delete edits[a]}
-  ls.s("ropa_edits",JSON.stringify(edits));
-  merge();tabs();filters();grid();fromShop();flush()});
+// ---- Arranque ----
+if(sess)loadAll();else showLogin();
 
 // ---- Datos que envía el botón "+ A mi cesta" desde la ficha de la tienda ----
-const MY={letras:["M","L"],numero:["40","42"],calzado:["40.5","41","41.5","42"]};
+const MY_DEF={letras:["M","L"],numero:["40","42"],calzado:["40.5","41","41.5","42"]};let MY={...MY_DEF};
 function sizePlan(name,sz){
  const vals=sz.map(s=>String(s[0]).toUpperCase().replace(",","."));
  if(/zapatill|zapato|sneaker|\bbotas?\b|botín|deportiv|mocas|sandalia|chancla/i.test(name)||vals.some(v=>/^\d{2}\.5$/.test(v)))

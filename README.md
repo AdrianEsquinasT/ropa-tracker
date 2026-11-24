@@ -23,20 +23,26 @@ Solo lee lo que la página ya muestra; no hace peticiones extra a la tienda
 ni envía nada a terceros. Los datos viajan en el fragmento `#` del enlace,
 que no llega a ningún servidor.
 
-## Sincronizar entre dispositivos (opcional, recomendado)
+## Cuenta y datos (Supabase)
 
-Sin esto, lo que añades se queda en el navegador donde lo añadiste. Con esto, cada
-alta, edición o borrado se guarda en `items.json` del repositorio: aparece en todos
-tus dispositivos y entra en el seguimiento de precios.
+La cesta vive en Supabase, en una base de datos privada: cada usuario solo ve y toca lo
+suyo (reglas RLS en `supabase/schema.sql`). La web solo lleva la clave *publicable*, que
+está pensada para ir en el navegador; sin sesión no da acceso a nada.
 
-1. En la app, pulsa el icono de la nube (arriba) o "Sincronizar".
-2. Crea una clave *fine-grained* en GitHub con acceso **solo a este repositorio** y
-   el permiso **Contents: Read and write** (la app explica los pasos).
-3. Pégala y pulsa "Guardar y probar". Repite en cada dispositivo.
+- **Acceso:** la primera vez en cada dispositivo, correo + letra; después la sesión se
+  queda abierta y se renueva sola. Si caduca o cierras sesión, solo pide la letra.
+- **Varios usuarios:** cada usuario nuevo que crees en Supabase tiene su propia cesta y
+  sus propias tallas.
+- **Sin conexión:** los cambios esperan en cola y se suben solos al volver.
 
-La clave se guarda solo en ese navegador, nunca en el repositorio. Si no hay
-conexión, los cambios esperan en cola y se suben solos al volver. Si dos
-dispositivos guardan a la vez, se reintenta sin perder nada.
+Puesta en marcha (una vez):
+1. Supabase → SQL Editor → pega `supabase/schema.sql` → Run.
+2. Supabase → Authentication → desactiva el registro de usuarios nuevos.
+3. GitHub → Settings → Secrets and variables → Actions: `SUPABASE_URL`
+   (`https://<proyecto>.supabase.co`) y `SUPABASE_SERVICE_KEY` (la clave **secret**;
+   nunca en el código ni en chats). Con ellos, la comprobación de precios trabaja sobre
+   Supabase y, al ejecutarse cada 6 h, evita que el proyecto gratuito se pause.
+4. En la app: entra, abre "Tu cuenta" y pulsa **Importar la cesta anterior**.
 
 ## Añadir artículos desde el móvil
 

@@ -66,6 +66,26 @@ class T(unittest.TestCase):
             rec2, _ = track.check_item({**ITEM, "manual_price": 19.99}, json.loads(json.dumps(rec)), date(2026, 11, 28))
         rec3, _ = track.check_item({**it}, json.loads(json.dumps(rec2)), date(2026, 11, 29))
         self.assertEqual([h["source"] for h in rec3["history"]].count("manual"), 1)
+    def test_supabase_mode(self):
+        rows = [{"id": "r1", "art": "7210/538/104", "price": 27.99, "status": "manual",
+                 "history": [{"date": "2026-11-20", "price": 27.99, "source": "alta"}],
+                 "data": {"name": "Polo rugby", "type": "top", "url": "https://www.pullandbear.com/es/-l07210538",
+                          "wanted": ["M", "L"], "label_price": 27.99, "category": "ropa"}},
+                {"id": "r2", "art": "m1x", "price": 79, "status": "manual", "history": [],
+                 "data": {"name": "Sauvage", "type": "perfume", "url": "", "wanted": [], "category": "perfumes"}}]
+        calls = []
+        def fake_sb(method, path, body=None):
+            calls.append((method, path, body)); return rows if method == "GET" else None
+        with mock.patch.object(track, "sb", fake_sb), \
+             mock.patch.object(track, "fetch", return_value=(page("21.99", {"M": True, "L": False}), "https://www.pullandbear.com/es/polo-l07210538")), \
+             mock.patch.object(track, "send_email") as se:
+            track.main_supabase()
+        patches = {p.split("eq.")[1]: b for m, p, b in calls if m == "PATCH"}
+        self.assertEqual(patches["r1"]["price"], 21.99)                      # bajada guardada
+        self.assertEqual(patches["r1"]["data"]["in_my_size"], ["M"])          # tu talla leída
+        self.assertEqual(patches["r1"]["data"]["name"], "Polo rugby")         # no pisa tus datos
+        self.assertEqual(patches["r2"]["price"], 79)                          # sin URL: conserva precio
+        se.assert_called_once()                                               # aviso por correo de la bajada
     def test_email(self):
         a = [{"name": "n", "old": 15.99, "new": 12.99, "url": "u", "art": "a", "in_my_size": ["M"]}]
         env = {"SMTP_USER": "u@x", "SMTP_PASS": "p", "EMAIL_TO": "t@x"}

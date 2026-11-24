@@ -213,7 +213,52 @@ def send_email(alerts, today):
     return True
 
 
+SB_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SB_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+
+def sb(method, path, body=None):
+    """Llamada a la API de Supabase con la clave secreta (solo en los secretos de GitHub)."""
+    headers = {"apikey": SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal"}
+    if not SB_KEY.startswith("sb_"):           # claves antiguas tipo JWT
+        headers["Authorization"] = "Bearer " + SB_KEY
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(SB_URL + "/rest/v1/" + path, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=30) as r:
+        txt = r.read().decode("utf-8")
+        return json.loads(txt) if txt else None
+
+
+def main_supabase():
+    """Recorre los artículos de todas las cestas en Supabase y guarda precio, histórico y estado."""
+    today = date.today()
+    rows = sb("GET", "items?select=id,art,data,history,price,status") or []
+    alerts = []
+    for row in rows:
+        d = dict(row.get("data") or {})
+        item = {**d, "art": row["art"], "type": d.get("type") or "top",
+                "label_price": d.get("label_price") or row.get("price") or 0}
+        hist = row.get("history") or [{"date": today.isoformat(), "price": row.get("price") or item["label_price"], "source": "alta"}]
+        prev = {"art": row["art"], "history": hist}
+        if d.get("in_my_size") is not None:
+            prev["in_my_size"] = d["in_my_size"]
+        rec, alert = check_item(item, prev, today)
+        new_data = dict(d)
+        for k in ("image", "final_url", "stock", "in_my_size", "sizes"):
+            if rec.get(k) not in (None, "", []):
+                new_data[k] = rec[k]
+        sb("PATCH", "items?id=eq." + urllib.parse.quote(str(row["id"])),
+           {"history": rec["history"], "price": rec["price"], "status": rec["status"], "data": new_data})
+        print(row["art"], rec["status"], rec["price"])
+        if alert:
+            alerts.append(alert)
+    if alerts:
+        send_email(alerts, today)
+
+
 def main():
+    if SB_URL and SB_KEY:
+        return main_supabase()
     today = date.today()
     items = json.loads(ITEMS.read_text("utf-8"))
     prev = {r["art"]: r for r in json.loads(DATA.read_text("utf-8")).get("items", [])} if DATA.exists() else {}
