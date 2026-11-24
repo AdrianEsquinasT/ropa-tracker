@@ -29,8 +29,11 @@ La cesta vive en Supabase, en una base de datos privada: cada usuario solo ve y 
 suyo (reglas RLS en `supabase/schema.sql`). La web solo lleva la clave *publicable*, que
 está pensada para ir en el navegador; sin sesión no da acceso a nada.
 
-- **Acceso:** la primera vez en cada dispositivo, correo + letra; después la sesión se
-  queda abierta y se renueva sola. Si caduca o cierras sesión, solo pide la letra.
+- **Acceso:** la primera vez en cada dispositivo, usuario (lo de la izquierda de la @) +
+  letra; la app añade `@correo.es`. Después la sesión se queda abierta y se renueva sola;
+  si caduca o cierras sesión, solo pide la letra.
+- **Usuarios nuevos:** créalos en Supabase con `nombre@correo.es` y marcando *Auto Confirm
+  User* (ese dominio no es tuyo: así Supabase no le envía correos).
 - **Varios usuarios:** cada usuario nuevo que crees en Supabase tiene su propia cesta y
   sus propias tallas.
 - **Sin conexión:** los cambios esperan en cola y se suben solos al volver.

@@ -180,6 +180,8 @@ fieldset.sz legend{font:600 12px var(--sans);color:var(--mut);padding:0 6px}
 #lg_go{width:100%;height:52px;border-radius:16px;font:600 16px var(--sans);cursor:pointer}
 #lg_go:disabled{opacity:.6}
 .lg .detect{width:100%;text-align:left}
+.lg .toggle{justify-self:center}
+.lg_hi{margin:-4px 0 0;font:400 22px/1.2 var(--serif);color:var(--mut)}.lg_hi b{color:var(--ink);font-weight:400}
 #f_art[readonly]{opacity:.6}
 .open{margin-left:auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface-2);transition:background .2s,transform .2s var(--ease)}
 .open svg{width:14px;height:14px}
@@ -392,10 +394,11 @@ form.fm.shop .row2,form.fm.shop .or,form.fm.shop .scan,form.fm.shop .shoplink{di
 <div class="login" id="login" hidden><form id="lg_f" class="lg" autocomplete="on">
  <img src="icon-512.png" alt="" width="68" height="68" class="logo">
  <h2>Cesta de <em>deseos</em></h2>
- <label id="lg_el">Tu correo<input id="lg_email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false"></label>
+ <label id="lg_el">Usuario<input id="lg_email" type="text" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+ <p class="lg_hi" id="lg_hi" hidden></p>
  <label class="lg_letter">Tu letra<input id="lg_l" maxlength="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Tu letra de acceso"></label>
  <button class="b1" id="lg_go" type="submit">Entrar</button>
- <button type="button" id="lg_other" class="toggle" hidden>Entrar con otra cuenta</button>
+ <button type="button" id="lg_other" class="toggle" hidden>Entrar con otro usuario</button>
  <div class="detect" id="lg_res"></div>
 </form></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -829,7 +832,8 @@ function toast(html,actions=[],ms=5000){const t=$("toast");
 // La clave publicable está hecha para ir dentro de la web: lo que protege los datos es la sesión
 // de cada usuario y las reglas de la base de datos (cada uno solo ve y toca lo suyo).
 const SB_URL=ls.g("ropa_sb_url","https://pmygciapqksrsahdtzgv.supabase.co"),
-      SB_KEY="sb_publishable_U6Nubm2_euTX4z7OMC3GWg_CEML2j97",PW=l=>"0".repeat(5)+l;
+      SB_KEY="sb_publishable_U6Nubm2_euTX4z7OMC3GWg_CEML2j97",PW=l=>"0".repeat(5)+l,
+      DOM="correo.es",toEmail=u=>u.includes("@")?u:u+"@"+DOM,userOf=e=>String(e||"").split("@")[0];
 let sess=null;try{sess=JSON.parse(ls.g("ropa_sess","null"))}catch(e){}
 let flushing=false,syncErr="";
 const UK=k=>k+"_"+((sess&&sess.uid)||"x");
@@ -894,7 +898,7 @@ function syncStatus(){const b=$("syncst");if(!b)return;const n=getQ().length;b.c
  b.className="ok";b.textContent="✓ Guardado"}
 async function loadAll(){
  remote=getCache();merge();tabs();filters();grid();
- $("upd").textContent=sess.email||"";
+ $("upd").textContent=userOf(sess.email);
  try{
   const rows=await rest("items?select=art,data,history,price,status,created_at&order=created_at.asc");
   let list=rows.map(toItem);
@@ -909,20 +913,21 @@ async function loadAll(){
  merge();tabs();filters();grid();syncStatus();fromShop();flush()}
 
 // ---- Pantalla de acceso: correo una vez por dispositivo; después solo la letra ----
-function showLogin(msg){const e=ls.g("ropa_email","");
+function showLogin(msg){const e=userOf(ls.g("ropa_email",""));
  $("lg_email").value=e;$("lg_el").hidden=!!e;$("lg_other").hidden=!e;$("lg_l").value="";
+ $("lg_hi").hidden=!e;$("lg_hi").innerHTML=e?"Hola, <b>"+esc(e)+"</b>":"";
  $("lg_res").className="detect"+(msg?" bad":"");$("lg_res").textContent=msg||"";
  $("login").hidden=false;setTimeout(()=>(e?$("lg_l"):$("lg_email")).focus(),60)}
-$("lg_other").onclick=()=>{$("lg_el").hidden=false;$("lg_other").hidden=true;$("lg_email").value="";$("lg_email").focus()};
+$("lg_other").onclick=()=>{$("lg_el").hidden=false;$("lg_other").hidden=true;$("lg_hi").hidden=true;$("lg_email").value="";$("lg_email").focus()};
 $("lg_f").onsubmit=async ev=>{ev.preventDefault();
- const email=$("lg_email").value.trim().toLowerCase(),l=$("lg_l").value.trim(),box=$("lg_res");
- if(!email){$("lg_el").hidden=false;box.className="detect bad";box.textContent="Escribe tu correo.";return}
+ const email=toEmail($("lg_email").value.trim().toLowerCase()),l=$("lg_l").value.trim(),box=$("lg_res");
+ if(!userOf(email)){$("lg_el").hidden=false;box.className="detect bad";box.textContent="Escribe tu usuario.";return}
  if(l.length!==1){box.className="detect bad";box.textContent="Escribe tu letra.";return}
  $("lg_go").disabled=true;box.className="detect ok";box.textContent="Entrando…";
  try{await authReq("password",{email,password:PW(l)});ls.s("ropa_email",email);
   $("login").hidden=true;box.textContent="";await loadAll()}
  catch(e){box.className="detect bad";
-  box.textContent=/invalid_credentials|invalid_grant/.test(e.code)||e.status===400&&!e.code?"Esa letra no corresponde a este correo.":
+  box.textContent=/invalid_credentials|invalid_grant/.test(e.code)||e.status===400&&!e.code?"Ese usuario o esa letra no son correctos.":
    e.code==="email_not_confirmed"?"Tu usuario está sin confirmar: en Supabase, Authentication → Users, confírmalo.":
    e.status===429?"Demasiados intentos. Espera unos minutos.":"No he podido conectar. Revisa la conexión."}
  finally{$("lg_go").disabled=false}};
@@ -937,7 +942,7 @@ async function oldBasket(){
  getArr(K.loc).forEach(i=>{if(!list.some(x=>x.art===i.art))list.push(i)});
  return list}
 async function openCfg(){
- $("c_who").textContent=sess?"Sesión iniciada como "+sess.email+".":"";
+ $("c_who").textContent=sess?"Sesión iniciada como "+userOf(sess.email)+".":"";
  $("c_sl").value=szTxt(MY.letras);$("c_sn").value=szTxt(MY.numero);$("c_sc").value=szTxt(MY.calzado);
  $("c_res").className="detect";$("c_res").textContent="";$("c_imp").hidden=true;$("cfg").showModal();
  try{const old=(await oldBasket()).filter(o=>!remote.some(r=>r.art===o.art));
