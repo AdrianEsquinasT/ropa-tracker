@@ -40,7 +40,9 @@ LEAF.forEach(function(e){var n=N(T(e).match(PRE)[0]);if(!n)return;if(struck(e)){
 if(!price)price=now;
 if(orig&&!(price&&orig>price))orig=null;
 var img=P.image;if(Array.isArray(img))img=img[0];if(img&&typeof img=="object")img=img.url||img.contentUrl;
-img=img||M("og:image")||M("twitter:image");
+var ogi=M("og:image")||M("twitter:image");if(/\.svg(\?|$)|logo/i.test(ogi))ogi="";   /* algunas tiendas anuncian su logo */
+if(!img){var ip=document.querySelector('[itemprop="image"]');if(ip)img=ip.getAttribute("content")||ip.getAttribute("data-src")||ip.currentSrc||ip.getAttribute("src")}
+img=img||ogi;
 if(!img){var big=null,a=0;[].forEach.call(document.images,function(i){var s=i.naturalWidth*i.naturalHeight;if(s>a&&i.offsetParent){a=s;big=i}});img=big&&(big.currentSrc||big.src)}
 try{img=img?new URL(img,location.href).href:""}catch(e){img=""}
 var desc=(P.description||M("og:description")||M("description")||"").replace(/\s+/g," ").trim();
@@ -55,6 +57,7 @@ LD.forEach(function(o){[].concat(o.hasVariant||[]).forEach(function(v){var s=v.s
 OF.forEach(function(x){var s=x.size||(x.itemOffered&&x.itemOffered.size)||x.name;if(s&&typeof s=="object")s=s.name;add(s,avail(x))});
 function isBad(e){if(!e||e.nodeType!==1)return false;
  return !!(e.disabled||e.getAttribute("aria-disabled")=="true"||e.getAttribute("data-disabled")=="true"||
+  /no disponible|agotad|sin stock|out of stock|unavailable/i.test(e.getAttribute("data-stock")||e.getAttribute("data-availability")||"")||
   /disabled|unavailable|out-?of-?stock|sold|agotad|no-?stock/i.test(cls(e)))}
 if(!SZ.length)[].forEach.call(document.querySelectorAll('[class*="size" i],[class*="talla" i],[id*="size" i],[data-qa*="size" i],[aria-label*="talla" i]'),function(box){
  [].forEach.call(box.querySelectorAll("button,li,label,option,a,span,div"),function(e){
@@ -62,12 +65,18 @@ if(!SZ.length)[].forEach.call(document.querySelectorAll('[class*="size" i],[clas
   if(!RE.test(t))return;
   var bad=isBad(e)||isBad(e.parentElement)||[].some.call(e.querySelectorAll("*"),isBad)||/agotad|avísame|sin stock|out of stock/i.test(T(e));
   add(t,!bad,null,true)})});
+/* selectores de talla marcados por atributo (p. ej. data-type="select-size"), con su disponibilidad */
+[].forEach.call(document.querySelectorAll('[data-type*="size" i],[data-attr-value][data-attr-display-value]'),function(e){
+ var v=e.getAttribute("data-attr-value")||T(e);if(!RE.test(String(v).trim()))return;
+ add(v,!(isBad(e)||isBad(e.parentElement)),null,true)});
 SZ=SZ.slice(0,30);
 var all=(name+" "+desc+" "+T(document.body).slice(0,30000));
 var ml=(name+" "+desc).match(/(\d{2,3})\s?ml\b/i);ml=ml?ml[1]:(SZ.filter(function(s){return/ml$/i.test(s[0])}).map(function(s){return s[0].replace(/\s?ml/i,"")}).join("/")||"");
 var mm=all.match(/(\d{2}(?:[.,]\d)?)\s?mm\b/i);mm=mm?mm[1].replace(",","."):"";
 var canon=document.querySelector('link[rel="canonical"]');
-var D={u:location.href,c:canon&&canon.href||"",n:name.slice(0,140),p:price,op:orig,img:img,d:desc,sz:SZ,ml:ml,mm:mm,
+function clean(u){try{var x=new URL(u);["fbclid","gclid","igshid","media_type","mc_cid","mc_eid"].forEach(function(k){x.searchParams.delete(k)});
+ Array.from(x.searchParams.keys()).forEach(function(k){if(/^utm_/i.test(k))x.searchParams.delete(k)});x.hash="";return x.href}catch(e){return u}}
+var D={u:clean(location.href),c:canon&&canon.href||"",n:name.slice(0,140),p:price,op:orig,img:img,d:desc,sz:SZ,ml:ml,mm:mm,
  k:/\b(eau de|parfum|perfume|colonia|edt|edp|eau fra[iî]che|fragancia)\b/i.test(name+" "+desc)?"perfumes":
   /\b(reloj|watch|cron[oó]grafo|smartwatch)\b/i.test(name+" "+desc)?"relojes":""};
 var url=APP+"#add="+encodeURIComponent(JSON.stringify(D));
